@@ -27,7 +27,7 @@ public class Dbms {
                 createTables(stmt);
                 populateDemoData(stmt);
                 login();
-                showOperations();
+                showOperations(stmt);
 //                rs = stmt.executeQuery("SELECT COF_NAME, PRICE FROM COFFEES");
 //
 //                while (rs.next()) {
@@ -46,152 +46,6 @@ public class Dbms {
         }
     }
     
-    static void login() {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Login as:\n\n");
-        System.out.println("1) CEO\n");
-        System.out.println("2) Manager\n");
-        System.out.println("3) Front Desk Representative\n");
-        access_type = sc.nextInt();
-        //check if access_type is correct
-        //Validate login details?
-    }
-    
-    static void showOperations() {
-        switch(access_type) {
-            case 1:
-                ceoOperations();
-                break;
-            case 2:
-                mgrOperations();
-                break;
-            case 3:
-                fdrOperations();
-                break;
-            default:
-                System.out.println("Invalid option. Re-enter!\n");
-                login();
-        }
-    }
-    
-    static void ceoOperations() {
-        Scanner sc = new Scanner(System.in);
-//        Runtime.getRuntime().exec("clear");
-        
-        System.out.println("CEO View\n\n");
-        System.out.println("1) Manage hotels\n");
-        System.out.println("2) Manage staff\n");
-        System.out.println("3) View reports\n");
-        int option = sc.nextInt();
-        switch(option) {
-            case 1:
-                manageHotels();
-                break;
-            case 2:
-                manageStaff();
-                break;
-            case 3:
-                viewReports();
-                break;
-            default:
-                System.out.println("Invalid option. Re-enter!\n");
-                ceoOperations();
-        }
-    }
-    
-    static void mgrOperations() {
-        Scanner sc = new Scanner(System.in);
-//        Runtime.getRuntime().exec("clear");
-        
-        System.out.println("Manager View\n\n");
-        System.out.println("1) Manage hotels\n");
-        System.out.println("2) Manage staff\n");
-        System.out.println("3) View reports\n");
-        int option = sc.nextInt();
-        switch(option) {
-            case 1:
-                manageHotels();
-                break;
-            case 2:
-                manageStaff();
-                break;
-            case 3:
-                viewReports();
-                break;
-            default:
-                System.out.println("Invalid option. Re-enter!\n");
-                ceoOperations();
-        }
-    }
-    
-    static void fdrOperations() {
-        Scanner sc = new Scanner(System.in);
-//        Runtime.getRuntime().exec("clear");
-        
-        System.out.println("Front Desk Representative View\n\n");
-        System.out.println("1) Manage hotels\n");
-        System.out.println("2) Manage staff\n");
-        System.out.println("3) View reports\n");
-        int option = sc.nextInt();
-        switch(option) {
-            case 1:
-                manageHotels();
-                break;
-            case 2:
-                manageStaff();
-                break;
-            case 3:
-                viewReports();
-                break;
-            default:
-                System.out.println("Invalid option. Re-enter!\n");
-                ceoOperations();
-        }
-    }
-    
-    static void manageHotels() {
-        Scanner sc = new Scanner(System.in);
-//        Runtime.getRuntime().exec("clear");
-
-        System.out.println("Manage Hotels\n\n");
-        System.out.println("1) Add a new hotel\n");
-        System.out.println("2) Delete a hotel\n");
-        System.out.println("3) Update hotel's info\n");
-        int option = sc.nextInt();
-//        switch(option) {
-//            case 1:
-//
-//                break;
-//            case 2:
-//                manageStaff();
-//                break;
-//            case 3:
-//                viewReports();
-//                break;
-//            default:
-//                System.out.println("Invalid option. Re-enter!\n");
-//                ceoOperations();
-//        }
-    }
-    
-    static void manageStaff() {
-//        Runtime.getRuntime().exec("clear");
-        
-        System.out.println("Manage Staff\n\n");
-        System.out.println("1) Add new staff\n");
-        System.out.println("2) Delete staff\n");
-        System.out.println("3) Update staff's info\n");
-    }
-    
-    static void viewReports() {
-//        Runtime.getRuntime().exec("clear");
-        
-        System.out.println("View Reports\n\n");
-        System.out.println("1) Revenue earned\n");
-        System.out.println("2) Delete a hotel\n");
-        System.out.println("3) Update hotel's info\n");
-    }
-    
     static void close(Connection conn) {
         if(conn != null) {
             try { conn.close(); } catch(Throwable whatever) {}
@@ -208,6 +62,450 @@ public class Dbms {
         if(rs != null) {
             try { rs.close(); } catch(Throwable whatever) {}
         }
+    }
+    
+    static void login() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Login as:\n\n");
+        System.out.println("1) CEO\n");
+        System.out.println("2) Manager\n");
+        System.out.println("3) Front Desk Representative\n");
+        access_type = sc.nextInt();
+        //check if access_type is correct
+        //Validate login details?
+    }
+    
+    static void showOperations(Statement stmt) {
+        switch(access_type) {
+            case 1:
+                ceoOperations(stmt);
+                break;
+            case 2:
+                mgrOperations(stmt);
+                break;
+            case 3:
+                fdrOperations(stmt);
+                break;
+            default:
+                System.out.println("Invalid option. Re-enter!\n");
+                login();
+        }
+    }
+    
+    static void ceoOperations(Statement stmt) {
+        Scanner sc = new Scanner(System.in);
+//        Runtime.getRuntime().exec("clear");
+        
+        System.out.println("CEO View\n\n");
+        System.out.println("1) Manage hotels\n");
+        System.out.println("2) Manage staff\n");
+        System.out.println("3) View reports\n");
+        int option = sc.nextInt();
+        switch(option) {
+            case 1:
+                manageHotels(stmt);
+                break;
+            case 2:
+                manageStaff(stmt);
+                break;
+            case 3:
+                viewReports(stmt);
+                break;
+            default:
+                System.out.println("Invalid option. Re-enter!\n");
+                ceoOperations();
+        }
+    }
+    
+    static void mgrOperations(Statement stmt) {
+        Scanner sc = new Scanner(System.in);
+//        Runtime.getRuntime().exec("clear");
+        
+        System.out.println("Manager View\n\n");
+        System.out.println("1) Manage hotels\n");
+        System.out.println("2) Manage staff\n");
+        System.out.println("3) View reports\n");
+        int option = sc.nextInt();
+        switch(option) {
+            case 1:
+                manageHotels(stmt);
+                break;
+            case 2:
+                manageStaff(stmt);
+                break;
+            case 3:
+                viewReports(stmt);
+                break;
+            default:
+                System.out.println("Invalid option. Re-enter!\n");
+                ceoOperations();
+        }
+    }
+    
+    static void fdrOperations(Statement stmt) {
+        Scanner sc = new Scanner(System.in);
+//        Runtime.getRuntime().exec("clear");
+        
+        System.out.println("Front Desk Representative View\n\n");
+        System.out.println("1) Manage customers\n");
+        System.out.println("2) Manage room assignment\n");
+        System.out.println("3) Manage staff\n");
+        System.out.println("4) View reports\n");
+        int option = sc.nextInt();
+        switch(option) {
+            case 1:
+                manageCustomers(stmt);
+                break;
+            case 2:
+                manageAssign(stmt);
+                break;
+            case 3:
+                manageStaff(stmt);
+                break;
+            case 4:
+                viewReports(stmt);
+                break;
+            default:
+                System.out.println("Invalid option. Re-enter!\n");
+                ceoOperations();
+        }
+    }
+    
+
+    static void manageHotels(Statement stmt) {
+        Scanner sc = new Scanner(System.in);
+//        Runtime.getRuntime().exec("clear");
+
+        System.out.println("Manage Hotels\n\n");
+        System.out.println("1) Add a new hotel\n");
+        System.out.println("2) Delete a hotel\n");
+        System.out.println("3) Update hotel's info\n");
+        System.out.println("4) Add a new room\n");
+        System.out.println("5) Delete a room\n");
+        System.out.println("6) Update room info\n");
+        
+        int option = sc.nextInt();
+        switch(option) {
+            case 1:
+                addHotel(stmt);
+                break;
+            case 2:
+                deleteHotel(stmt);
+                break;
+            case 3:
+                updateHotel(stmt);
+                break;
+            case 4:
+                addRoom(stmt);
+                break;
+            case 5:
+                deleteRoom(stmt);
+                break;
+            case 6:
+                updateRoom(stmt);
+                break;
+            default:
+                System.out.println("Invalid option. Re-enter!\n");
+                manageHotels();
+        }
+    }
+    
+    static void manageStaff(Statement stmt) {
+        Scanner sc = new Scanner(System.in);
+
+//        Runtime.getRuntime().exec("clear");
+        
+        System.out.println("Manage Staff\n\n");
+        System.out.println("1) Add new staff\n");
+        System.out.println("2) Delete staff\n");
+        System.out.println("3) Update staff's info\n");
+        int option = sc.nextInt();
+        switch(option) {
+            case 1:
+                addStaff(stmt);
+                break;
+            case 2:
+                deleteStaff(stmt);
+                break;
+            case 3:
+                updateStaff(stmt);
+                break;
+            default:
+                System.out.println("Invalid option. Re-enter!\n");
+                manageStaff();
+        }
+    }
+    
+    static void manageCustomers(Statement stmt) {
+        Scanner sc = new Scanner(System.in);
+        
+        //        Runtime.getRuntime().exec("clear");
+        
+        System.out.println("Manage Customers\n\n");
+        System.out.println("1) Add customer\n");
+        System.out.println("2) Delete customer\n");
+        System.out.println("3) Update customer's info\n");
+        int option = sc.nextInt();
+        switch(option) {
+            case 1:
+                addCustomer(stmt);
+                break;
+            case 2:
+                deleteCustomer(stmt);
+                break;
+            case 3:
+                updateCustomer(stmt);
+                break;
+            default:
+                System.out.println("Invalid option. Re-enter!\n");
+                manageStaff();
+        }
+    }
+    
+    static void viewReports() {
+//        Runtime.getRuntime().exec("clear");
+        
+        System.out.println("View Reports\n\n");
+        System.out.println("1) Revenue earned\n");
+        System.out.println("2) Delete a hotel\n");
+        System.out.println("3) Update hotel's info\n");
+    }
+    
+    static void addHotel(Statement stmt) {
+        String name, address;
+        int phone, mid;
+        Scanner sc = new Scanner(System.in);
+        
+        System.out.println("Add a Hotel\n\n");
+        System.out.println("Enter name: ");
+        name = sc.nextLine();
+        System.out.println("Enter address: ");
+        address = sc.nextLine();
+        System.out.println("Enter phone: ");
+        phone = sc.nextInt();
+        System.out.println("Enter manager ID: ");
+        mid = sc.nextInt();
+        
+        //        stmt.executeUpdate("INSERT INTO hotels)
+    }
+    
+    static void deleteHotel(Statement stmt) {
+        int id;
+        Scanner sc = new Scanner(System.in);
+        
+        System.out.println("Delete a Hotel\n\n");
+        System.out.println("Enter ID: ");
+        id = sc.nextInt();
+        
+        //        stmt.executeUpdate("INSERT INTO hotels)
+    }
+    
+    static void updateHotel(Statement stmt) {
+        String name, address;
+        int phone, id, mid;
+        Scanner sc = new Scanner(System.in);
+        
+        System.out.println("Update a Hotel\n\n");
+        System.out.println("Enter hotel ID: ");
+        id = sc.nextInt();
+        System.out.println("Enter new name: ");
+        name = sc.nextLine();
+        System.out.println("Enter new address: ");
+        address = sc.nextLine();
+        System.out.println("Enter new phone: ");
+        phone = sc.nextInt();
+        System.out.println("Enter new manager ID: ");
+        mid = sc.nextInt();
+        
+        //        stmt.executeUpdate("INSERT INTO hotels)
+    }
+    
+    static void addRoom(Statement stmt) {
+        String name, category;
+        int no, hid, occ, availability;
+        double price;
+        
+        Scanner sc = new Scanner(System.in);
+        
+        System.out.println("Add a Room\n\n");
+        System.out.println("Enter hotel ID: ");
+        hid = sc.nextInt();
+        System.out.println("Enter room number: ");
+        no = sc.nextInt();
+        System.out.println("Enter category: ");
+        category = sc.nextLine();
+        System.out.println("Enter max occupancy: ");
+        occ = sc.nextInt();
+        System.out.println("Enter price: ");
+        price = sc.nextDouble();
+        System.out.println("Enter availability (0/1): ");
+        availability = sc.nextInt();
+        
+        //        stmt.executeUpdate("INSERT INTO hotels)
+    }
+    
+    static void deleteRoom(Statement stmt) {
+        int id;
+        Scanner sc = new Scanner(System.in);
+        
+        System.out.println("Delete a Room\n\n");
+        System.out.println("Enter ID: ");
+        id = sc.nextInt();
+        
+        //        stmt.executeUpdate("INSERT INTO hotels)
+    }
+    
+    static void updateRoom(Statement stmt) {
+        String name, category;
+        int no, hid, occ, availability;
+        double price;
+        
+        Scanner sc = new Scanner(System.in);
+        
+        System.out.println("Update a Room\n\n");
+        System.out.println("Enter hotel ID: ");
+        hid = sc.nextInt();
+        System.out.println("Enter room number: ");
+        no = sc.nextInt();
+        System.out.println("Enter new category: ");
+        category = sc.nextLine();
+        System.out.println("Enter new max occupancy: ");
+        occ = sc.nextInt();
+        System.out.println("Enter new price: ");
+        price = sc.nextDouble();
+        System.out.println("Enter new availability (0/1): ");
+        availability = sc.nextInt();
+        
+        //        stmt.executeUpdate("INSERT INTO hotels)
+    }
+    
+    
+    
+    static void addStaff(Statement stmt) {
+        String name, title, dept, address;
+        int age, phone, availability;
+        Scanner sc = new Scanner(System.in);
+        
+        System.out.println("Add Staff\n\n");
+        System.out.println("Enter name: ");
+        name = sc.nextLine();
+        System.out.println("Enter age: ");
+        age = sc.nextInt();
+        System.out.println("Enter title: ");
+        title = sc.nextLine();
+        System.out.println("Enter department: ");
+        dept = sc.nextLine();
+        System.out.println("Enter phone: ");
+        phone = sc.nextInt();
+        System.out.println("Enter address: ");
+        address = sc.nextLine();
+        System.out.println("Enter availability (0/1): ");
+        availability = sc.nextInt();
+        
+        //        stmt.executeUpdate("INSERT INTO hotels)
+    }
+    
+    static void deleteStaff(Statement stmt) {
+        int id;
+        Scanner sc = new Scanner(System.in);
+        
+        System.out.println("Delete Staff\n\n");
+        System.out.println("Enter ID: ");
+        id = sc.nextInt();
+        
+        //        stmt.executeUpdate("INSERT INTO hotels)
+    }
+    
+    static void updateStaff(Statement stmt) {
+        String name, title, dept, address;
+        int id, age, phone, availability;
+        Scanner sc = new Scanner(System.in);
+        
+        System.out.println("Update Staff\n\n");
+        System.out.println("Enter staff ID: ");
+        id = sc.nextInt();
+        System.out.println("Enter new name: ");
+        name = sc.nextLine();
+        System.out.println("Enter new age: ");
+        age = sc.nextInt();
+        System.out.println("Enter new title: ");
+        title = sc.nextLine();
+        System.out.println("Enter new department: ");
+        dept = sc.nextLine();
+        System.out.println("Enter new phone: ");
+        phone = sc.nextInt();
+        System.out.println("Enter new address: ");
+        address = sc.nextLine();
+        System.out.println("Enter new availability (0/1): ");
+        availability = sc.nextInt();
+        
+        //        stmt.executeUpdate("INSERT INTO hotels)
+    }
+    
+    static void addCustomer(Statement stmt) {
+        String name, dob, email;
+        int phone, ssn;
+        Scanner sc = new Scanner(System.in);
+        
+        System.out.println("Add Customer\n\n");
+        System.out.println("Enter name: ");
+        name = sc.nextLine();
+        System.out.println("Enter dob: ");
+        dob = sc.nextLine();
+        System.out.println("Enter phone: ");
+        phone = sc.nextInt();
+        System.out.println("Enter email: ");
+        email = sc.nextLine();
+        System.out.println("Enter ssn: ");
+        ssn = sc.nextInt();
+        
+        //        stmt.executeUpdate("INSERT INTO hotels)
+    }
+    
+    static void deleteCustomer(Statement stmt) {
+        int id;
+        Scanner sc = new Scanner(System.in);
+        
+        System.out.println("Delete Customer\n\n");
+        System.out.println("Enter ID: ");
+        id = sc.nextInt();
+        
+        //        stmt.executeUpdate("INSERT INTO hotels)
+    }
+    
+    static void updateCustomer(Statement stmt) {
+        String name, dob, email;
+        int id, phone, ssn;
+        Scanner sc = new Scanner(System.in);
+        
+        System.out.println("Update Customer\n\n");
+        System.out.println("Enter customer ID: ");
+        id = sc.nextInt();
+        System.out.println("Enter name: ");
+        name = sc.nextLine();
+        System.out.println("Enter dob: ");
+        dob = sc.nextLine();
+        System.out.println("Enter phone: ");
+        phone = sc.nextInt();
+        System.out.println("Enter email: ");
+        email = sc.nextLine();
+        System.out.println("Enter ssn: ");
+        ssn = sc.nextInt();
+        
+        //        stmt.executeUpdate("INSERT INTO hotels)
+    }
+    
+    static void dropTables(Statement stmt) throws Exception{
+        stmt.executeUpdate("DROP TABLE customer_makes");
+        stmt.executeUpdate("DROP TABLE reservation_for");
+        stmt.executeUpdate("DROP TABLE staff_works_at");
+        stmt.executeUpdate("DROP TABLE staff_provides");
+        stmt.executeUpdate("DROP TABLE customers");
+        stmt.executeUpdate("DROP TABLE services");
+        stmt.executeUpdate("DROP TABLE rooms");
+        stmt.executeUpdate("DROP TABLE hotels");
+        stmt.executeUpdate("DROP TABLE reservations");
+        stmt.executeUpdate("DROP TABLE staff");
     }
     
     static void createTables(Statement stmt) throws Exception{
@@ -248,7 +546,7 @@ public class Dbms {
                            "hotel_id INT NOT NULL, " +
                            "category VARCHAR(128) NOT NULL, " +
                            "max_occupancy INT NOT NULL, " +
-                           "price INT NOT NULL, " +
+                           "price DECIMAL(10,2) NOT NULL, " +
                            "is_available TINYINT(1) NOT NULL, " +
                            "CONSTRAINT hotel_room_fk  " +
                            "FOREIGN KEY(hotel_id) REFERENCES hotels(id)  " +
@@ -477,17 +775,4 @@ public class Dbms {
         stmt.executeUpdate("INSERT INTO staff_provides " +
                            "VALUES (4, 3, 5)");
         }
-    
-    static void dropTables(Statement stmt) throws Exception{
-        stmt.executeUpdate("DROP TABLE customer_makes");
-        stmt.executeUpdate("DROP TABLE reservation_for");
-        stmt.executeUpdate("DROP TABLE staff_works_at");
-        stmt.executeUpdate("DROP TABLE staff_provides");
-        stmt.executeUpdate("DROP TABLE customers");
-        stmt.executeUpdate("DROP TABLE services");
-        stmt.executeUpdate("DROP TABLE rooms");
-        stmt.executeUpdate("DROP TABLE hotels");
-        stmt.executeUpdate("DROP TABLE reservations");
-        stmt.executeUpdate("DROP TABLE staff");
-    }
 }
