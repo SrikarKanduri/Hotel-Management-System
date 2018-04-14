@@ -157,7 +157,7 @@ public class Dbms {
                 manageCustomers(stmt);
                 break;
             case 2:
-                manageAssign(stmt);
+                assignRoom(stmt);
                 break;
             case 3:
                 manageStaff(stmt);
@@ -171,7 +171,6 @@ public class Dbms {
         }
     }
     
-
     static void manageHotels(Statement stmt) {
         Scanner sc = new Scanner(System.in);
 //        Runtime.getRuntime().exec("clear");
@@ -483,6 +482,32 @@ public class Dbms {
         id = sc.nextInt();
         System.out.println("Enter name: ");
         name = sc.nextLine();
+        System.out.println("Enter dob: ");
+        dob = sc.nextLine();
+        System.out.println("Enter phone: ");
+        phone = sc.nextInt();
+        System.out.println("Enter email: ");
+        email = sc.nextLine();
+        System.out.println("Enter ssn: ");
+        ssn = sc.nextInt();
+        
+        //        stmt.executeUpdate("INSERT INTO hotels)
+    }
+    
+    static void assignRoom(Statement stmt) {
+        String name, dob, email;
+        int hid, id, phone, ssn;
+        Scanner sc = new Scanner(System.in);
+        
+        System.out.println("Assign Room\n\n");
+        System.out.println("Enter hotel ID: ");
+        hid = sc.nextInt();
+        System.out.println("Enter customer ID: ");
+        id = sc.nextInt();
+        System.out.println("Enter room number: ");
+        name = sc.nextLine();
+        
+        stmt.executeUpdate("SELECT no FROM rooms WHERE category = ‘Economy’ AND hotel_id = 1 AND is_available = 1");
         System.out.println("Enter dob: ");
         dob = sc.nextLine();
         System.out.println("Enter phone: ");
