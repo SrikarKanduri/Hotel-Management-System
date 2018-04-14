@@ -75,7 +75,7 @@ public class Dbms {
         //Validate login details?
     }
     
-    static void showOperations(Statement stmt) {
+    static void showOperations(Statement stmt) throws Exception {
         switch(access_type) {
             case 1:
                 ceoOperations(stmt);
@@ -87,12 +87,10 @@ public class Dbms {
                 fdrOperations(stmt);
                 break;
             default:
-                System.out.println("Invalid option. Re-enter!\n");
-                login();
-        }
+                System.out.println("Invalid option. Re-enter!\n");        }
     }
     
-    static void ceoOperations(Statement stmt) {
+    static void ceoOperations(Statement stmt) throws Exception {
         Scanner sc = new Scanner(System.in);
 //        Runtime.getRuntime().exec("clear");
         
@@ -113,11 +111,10 @@ public class Dbms {
                 break;
             default:
                 System.out.println("Invalid option. Re-enter!\n");
-                ceoOperations();
         }
     }
     
-    static void mgrOperations(Statement stmt) {
+    static void mgrOperations(Statement stmt) throws Exception {
         Scanner sc = new Scanner(System.in);
 //        Runtime.getRuntime().exec("clear");
         
@@ -138,11 +135,10 @@ public class Dbms {
                 break;
             default:
                 System.out.println("Invalid option. Re-enter!\n");
-                ceoOperations();
         }
     }
     
-    static void fdrOperations(Statement stmt) {
+    static void fdrOperations(Statement stmt) throws Exception {
         Scanner sc = new Scanner(System.in);
 //        Runtime.getRuntime().exec("clear");
         
@@ -167,11 +163,10 @@ public class Dbms {
                 break;
             default:
                 System.out.println("Invalid option. Re-enter!\n");
-                ceoOperations();
         }
     }
     
-    static void manageHotels(Statement stmt) {
+    static void manageHotels(Statement stmt) throws Exception {
         Scanner sc = new Scanner(System.in);
 //        Runtime.getRuntime().exec("clear");
 
@@ -205,11 +200,10 @@ public class Dbms {
                 break;
             default:
                 System.out.println("Invalid option. Re-enter!\n");
-                manageHotels();
         }
     }
     
-    static void manageStaff(Statement stmt) {
+    static void manageStaff(Statement stmt) throws Exception {
         Scanner sc = new Scanner(System.in);
 
 //        Runtime.getRuntime().exec("clear");
@@ -231,11 +225,10 @@ public class Dbms {
                 break;
             default:
                 System.out.println("Invalid option. Re-enter!\n");
-                manageStaff();
         }
     }
     
-    static void manageCustomers(Statement stmt) {
+    static void manageCustomers(Statement stmt) throws Exception {
         Scanner sc = new Scanner(System.in);
         
         //        Runtime.getRuntime().exec("clear");
@@ -257,11 +250,10 @@ public class Dbms {
                 break;
             default:
                 System.out.println("Invalid option. Re-enter!\n");
-                manageStaff();
         }
     }
     
-    static void viewReports() {
+    static void viewReports(Statement stmt) throws Exception {
 //        Runtime.getRuntime().exec("clear");
         
         System.out.println("View Reports\n\n");
@@ -270,7 +262,7 @@ public class Dbms {
         System.out.println("3) Update hotel's info\n");
     }
     
-    static void addHotel(Statement stmt) {
+    static void addHotel(Statement stmt) throws Exception {
         String name, address;
         int phone, mid;
         Scanner sc = new Scanner(System.in);
@@ -288,7 +280,7 @@ public class Dbms {
         //        stmt.executeUpdate("INSERT INTO hotels)
     }
     
-    static void deleteHotel(Statement stmt) {
+    static void deleteHotel(Statement stmt) throws Exception {
         int id;
         Scanner sc = new Scanner(System.in);
         
@@ -299,7 +291,7 @@ public class Dbms {
         //        stmt.executeUpdate("INSERT INTO hotels)
     }
     
-    static void updateHotel(Statement stmt) {
+    static void updateHotel(Statement stmt) throws Exception {
         String name, address;
         int phone, id, mid;
         Scanner sc = new Scanner(System.in);
@@ -319,7 +311,7 @@ public class Dbms {
         //        stmt.executeUpdate("INSERT INTO hotels)
     }
     
-    static void addRoom(Statement stmt) {
+    static void addRoom(Statement stmt) throws Exception {
         String name, category;
         int no, hid, occ, availability;
         double price;
@@ -343,7 +335,7 @@ public class Dbms {
         //        stmt.executeUpdate("INSERT INTO hotels)
     }
     
-    static void deleteRoom(Statement stmt) {
+    static void deleteRoom(Statement stmt) throws Exception {
         int id;
         Scanner sc = new Scanner(System.in);
         
@@ -354,7 +346,7 @@ public class Dbms {
         //        stmt.executeUpdate("INSERT INTO hotels)
     }
     
-    static void updateRoom(Statement stmt) {
+    static void updateRoom(Statement stmt) throws Exception {
         String name, category;
         int no, hid, occ, availability;
         double price;
@@ -380,7 +372,7 @@ public class Dbms {
     
     
     
-    static void addStaff(Statement stmt) {
+    static void addStaff(Statement stmt) throws Exception {
         String name, title, dept, address;
         int age, phone, availability;
         Scanner sc = new Scanner(System.in);
@@ -404,7 +396,7 @@ public class Dbms {
         //        stmt.executeUpdate("INSERT INTO hotels)
     }
     
-    static void deleteStaff(Statement stmt) {
+    static void deleteStaff(Statement stmt) throws Exception {
         int id;
         Scanner sc = new Scanner(System.in);
         
@@ -415,7 +407,7 @@ public class Dbms {
         //        stmt.executeUpdate("INSERT INTO hotels)
     }
     
-    static void updateStaff(Statement stmt) {
+    static void updateStaff(Statement stmt) throws Exception {
         String name, title, dept, address;
         int id, age, phone, availability;
         Scanner sc = new Scanner(System.in);
@@ -441,7 +433,7 @@ public class Dbms {
         //        stmt.executeUpdate("INSERT INTO hotels)
     }
     
-    static void addCustomer(Statement stmt) {
+    static void addCustomer(Statement stmt) throws Exception {
         String name, dob, email;
         int phone, ssn;
         Scanner sc = new Scanner(System.in);
@@ -461,7 +453,7 @@ public class Dbms {
         //        stmt.executeUpdate("INSERT INTO hotels)
     }
     
-    static void deleteCustomer(Statement stmt) {
+    static void deleteCustomer(Statement stmt) throws Exception {
         int id;
         Scanner sc = new Scanner(System.in);
         
@@ -472,7 +464,7 @@ public class Dbms {
         //        stmt.executeUpdate("INSERT INTO hotels)
     }
     
-    static void updateCustomer(Statement stmt) {
+    static void updateCustomer(Statement stmt) throws Exception {
         String name, dob, email;
         int id, phone, ssn;
         Scanner sc = new Scanner(System.in);
@@ -494,20 +486,27 @@ public class Dbms {
         //        stmt.executeUpdate("INSERT INTO hotels)
     }
     
-    static void assignRoom(Statement stmt) {
-        String name, dob, email;
-        int hid, id, phone, ssn;
+    static void assignRoom(Statement stmt) throws Exception {
+        String category, dob, email;
+        int hid, cid, phone, ssn;
+        ResultSet rs = null;
         Scanner sc = new Scanner(System.in);
         
         System.out.println("Assign Room\n\n");
         System.out.println("Enter hotel ID: ");
         hid = sc.nextInt();
         System.out.println("Enter customer ID: ");
-        id = sc.nextInt();
-        System.out.println("Enter room number: ");
-        name = sc.nextLine();
+        cid = sc.nextInt();
+        System.out.println("Enter room category: ");
+        category = sc.nextLine();
         
-        stmt.executeUpdate("SELECT no FROM rooms WHERE category = ‘Economy’ AND hotel_id = 1 AND is_available = 1");
+        String query = "SELECT no FROM rooms WHERE category = " + category + " AND hotel_id = " + hid + " AND is_available = 1";
+        rs = stmt.executeQuery(query);
+        if(!rs.isBeforeFirst()) {
+            System.out.println("No rooms available\n");
+        } else {
+            
+        }
         System.out.println("Enter dob: ");
         dob = sc.nextLine();
         System.out.println("Enter phone: ");
@@ -536,7 +535,7 @@ public class Dbms {
     static void createTables(Statement stmt) throws Exception{
         // Create the CUSTOMERS table
         stmt.executeUpdate("CREATE TABLE customers (" +
-                           "id INT PRIMARY KEY AUTO_INCREMENT, " +
+                           "id INT PRIMARY KEY NOT NULL AUTO_INCREMENT, " +
                            "name VARCHAR(128) NOT NULL, " +
                            "dob DATE NOT NULL, " +
                            "phone INT NOT NULL, " +
@@ -545,7 +544,7 @@ public class Dbms {
         
         // Create the STAFF table
         stmt.executeUpdate("CREATE TABLE staff ( " +
-                           "id INT PRIMARY KEY AUTO_INCREMENT, " +
+                           "id INT  PRIMARY KEY AUTO_INCREMENT, " +
                            "name VARCHAR(128) NOT NULL, " +
                            "age INT, " +
                            "title VARCHAR(128) NOT NULL, " +
@@ -571,7 +570,7 @@ public class Dbms {
                            "hotel_id INT NOT NULL, " +
                            "category VARCHAR(128) NOT NULL, " +
                            "max_occupancy INT NOT NULL, " +
-                           "price DECIMAL(10,2) NOT NULL, " +
+                           "price INT NOT NULL, " +
                            "is_available TINYINT(1) NOT NULL, " +
                            "CONSTRAINT hotel_room_fk  " +
                            "FOREIGN KEY(hotel_id) REFERENCES hotels(id)  " +
@@ -659,145 +658,145 @@ public class Dbms {
     
     static void populateDemoData(Statement stmt) throws Exception{
         //Populate the CUSTOMERS table
-        stmt.executeUpdate("INSERT INTO customers " +
-                           "VALUES ('David', '01/30/1980', 123, 'david@gmail.com', 5939846)");
+        stmt.executeUpdate("INSERT INTO customers (name,dob,phone,email,ssn) " +
+                           "VALUES ('David', '1980-01-30', 123, 'david@gmail.com', 5939846)");
         
-        stmt.executeUpdate("INSERT INTO customers " +
-                           "VALUES ('Sarah', '01/30/1971', 456, 'sarah@gmail.com', 7778352)");
+        stmt.executeUpdate("INSERT INTO customers (name,dob,phone,email,ssn)" +
+                           "VALUES ('Sarah', '1971-01-30', 456, 'sarah@gmail.com', 7778352)");
         
-        stmt.executeUpdate("INSERT INTO customers " +
-                           "VALUES ('Joseph', '01/30/1987', 789, 'joseph@gmail.com', 8589430)");
+        stmt.executeUpdate("INSERT INTO customers (name,dob,phone,email,ssn) " +
+                           "VALUES ('Joseph', '1987-01-30', 789, 'joseph@gmail.com', 8589430)");
         
-        stmt.executeUpdate("INSERT INTO customers " +
-                           "VALUES ('Lucy', '01/30/1985', 213, 'lucy@gmail.com', 4409328)");
+        stmt.executeUpdate("INSERT INTO customers (name,dob,phone,email,ssn)" +
+                           "VALUES ('Lucy', '1985-01-30', 213, 'lucy@gmail.com', 4409328)");
         
         //Populate the STAFF table
-        stmt.executeUpdate("INSERT INTO staff " +
-                           "VALUES ('Mary', 40, 'Manager',  'Management', 654, '90 ABC St , Raleigh NC 27', 'Yes')");
+        stmt.executeUpdate("INSERT INTO staff (name,age,title,department,phone,address,availability) " +
+                           "VALUES ('Mary', 40, 'Manager',  'Management', 654, '90 ABC St , Raleigh NC 27', 1)");
         
-        stmt.executeUpdate("INSERT INTO staff " +
-                           "VALUES ('John', 45, 'Manager',  'Management', 564, '798 XYZ St , Rochester NY 54', 'Yes')");
+        stmt.executeUpdate("INSERT INTO staff (name,age,title,department,phone,address,availability)" +
+                           "VALUES ('John', 45, 'Manager',  'Management', 564, '798 XYZ St , Rochester NY 54', 1)");
         
-        stmt.executeUpdate("INSERT INTO staff " +
-                           "VALUES ('Carol', 55, 'Manager',  'Management', 564, '351 MH St , Greensboro NC 27', 'Yes')");
+        stmt.executeUpdate("INSERT INTO staff (name,age,title,department,phone,address,availability) " +
+                           "VALUES ('Carol', 55, 'Manager',  'Management', 564, '351 MH St , Greensboro NC 27', 1)");
         
-        stmt.executeUpdate("INSERT INTO staff " +
-                           "VALUES ('Emma', 55, 'Front Desk Staff',  'Management', 546, '49 ABC St , Raleigh NC 27', 'Yes')");
+        stmt.executeUpdate("INSERT INTO staff (name,age,title,department,phone,address,availability)" +
+                           "VALUES ('Emma', 55, 'Front Desk Staff',  'Management', 546, '49 ABC St , Raleigh NC 27', 1)");
         
-        stmt.executeUpdate("INSERT INTO staff " +
-                           "VALUES ('Ava', 55, 'Catering Staff',  'Catering', 777, '425 RG St , Raleigh NC 27', 'Yes')");
+        stmt.executeUpdate("INSERT INTO staff (name,age,title,department,phone,address,availability)" +
+                           "VALUES ('Ava', 55, 'Catering Staff',  'Catering', 777, '425 RG St , Raleigh NC 27', 1)");
         
-        stmt.executeUpdate("INSERT INTO staff " +
-                           "VALUES ('Peter', 52, 'Manager',  'Management', 724, '475 RG St , Raleigh NC 27', 'Yes')");
+        stmt.executeUpdate("INSERT INTO staff (name,age,title,department,phone,address,availability)" +
+                           "VALUES ('Peter', 52, 'Manager',  'Management', 724, '475 RG St , Raleigh NC 27', 1)");
         
-        stmt.executeUpdate("INSERT INTO staff " +
-                           "VALUES ('Olivia', 27, 'Front Desk Staff',  'Management', 799, '325 PD St , Raleigh NC 27', 'Yes')");
+        stmt.executeUpdate("INSERT INTO staff (name,age,title,department,phone,address,availability)" +
+                           "VALUES ('Olivia', 27, 'Front Desk Staff',  'Management', 799, '325 PD St , Raleigh NC 27', 1)");
         
         // Populate the HOTELS table
-        stmt.executeUpdate("INSERT INTO hotels " +
-                           "VALUES ('Hotel A', '21 ABC St , Raleigh NC 27', 919, 100)");
-        stmt.executeUpdate("INSERT INTO hotels " +
-                           "VALUES ('Hotel B', '25 XYZ St , Rochester NY 54', 718, 101)");
-        stmt.executeUpdate("INSERT INTO hotels " +
-                           "VALUES ('Hotel C', '29 PQR St , Greensboro NC 27', 984, 102)");
-        stmt.executeUpdate("INSERT INTO hotels " +
-                           "VALUES ('Hotel D', '28 GHW St , Raleigh NC 32', 920, 105)");
+        stmt.executeUpdate("INSERT INTO hotels (name,address,phone,manager_id)" +
+                           "VALUES ('Hotel A', '21 ABC St , Raleigh NC 27', 919, 1)");
+        stmt.executeUpdate("INSERT INTO hotels (name,address,phone,manager_id)" +
+                           "VALUES ('Hotel B', '25 XYZ St , Rochester NY 54', 718, 2)");
+        stmt.executeUpdate("INSERT INTO hotels (name,address,phone,manager_id)" +
+                           "VALUES ('Hotel C', '29 PQR St , Greensboro NC 27', 984, 3)");
+        stmt.executeUpdate("INSERT INTO hotels (name,address,phone,manager_id)" +
+                           "VALUES ('Hotel D', '28 GHW St , Raleigh NC 32', 920, 6)");
         
         //Populate the ROOMS table
-        stmt.executeUpdate("INSERT INTO rooms " +
-                           "VALUES ( 1, 1, 'Economy', 1, 100, 'Yes')");
-        stmt.executeUpdate("INSERT INTO rooms " +
-                           "VALUES ( 2, 1, 'Deluxe', 2, 200, 'Yes')");
-        stmt.executeUpdate("INSERT INTO rooms " +
-                           "VALUES ( 3, 2, 'Economy', 1, 100, 'Yes')");
-        stmt.executeUpdate("INSERT INTO rooms " +
-                           "VALUES ( 2, 3, 'Executive', 3, 1000, 'No')");
-        stmt.executeUpdate("INSERT INTO rooms " +
-                           "VALUES ( 1, 4, 'Presidential', 4, 5000, 'Yes')");
-        stmt.executeUpdate("INSERT INTO rooms " +
-                           "VALUES ( 5, 1, 'Deluxe', 2, 200, 'Yes')");
+        stmt.executeUpdate("INSERT INTO rooms (no,hotel_id, category, max_occupancy, price, is_available)" +
+                           "VALUES ( 1, 1, 'Economy', 1, 100, 1)");
+        stmt.executeUpdate("INSERT INTO rooms (no,hotel_id, category, max_occupancy, price, is_available)" +
+                           "VALUES ( 2, 1, 'Deluxe', 2, 200, 1)");
+        stmt.executeUpdate("INSERT INTO rooms (no,hotel_id, category, max_occupancy, price, is_available)" +
+                           "VALUES ( 3, 2, 'Economy', 1, 100, 1)");
+        stmt.executeUpdate("INSERT INTO rooms (no,hotel_id, category, max_occupancy, price, is_available)" +
+                           "VALUES ( 2, 3, 'Executive', 3, 1000, 0)");
+        stmt.executeUpdate("INSERT INTO rooms (no,hotel_id, category, max_occupancy, price, is_available)" +
+                           "VALUES ( 1, 4, 'Presidential', 4, 5000, 1)");
+        stmt.executeUpdate("INSERT INTO rooms (no,hotel_id, category, max_occupancy, price, is_available)" +
+                           "VALUES ( 5, 1, 'Deluxe', 2, 200, 1)");
         
         //Populate the STAFF_WORKS_AT table
-        stmt.executeUpdate("INSERT INTO staff_works_at " +
+        stmt.executeUpdate("INSERT INTO staff_works_at (hotel_id, staff_id)" +
                            "VALUES (1, 1)");
         
-        stmt.executeUpdate("INSERT INTO staff_works_at " +
+        stmt.executeUpdate("INSERT INTO staff_works_at (hotel_id, staff_id)" +
                            "VALUES (2, 2)");
         
-        stmt.executeUpdate("INSERT INTO staff_works_at " +
+        stmt.executeUpdate("INSERT INTO staff_works_at (hotel_id, staff_id)" +
                            "VALUES (3, 3)");
         
-        stmt.executeUpdate("INSERT INTO staff_works_at " +
-                           "VALUES (4, 1)");
+        stmt.executeUpdate("INSERT INTO staff_works_at (hotel_id, staff_id)" +
+                           "VALUES (1, 4)");
         
-        stmt.executeUpdate("INSERT INTO staff_works_at " +
-                           "VALUES (5, 1)");
+        stmt.executeUpdate("INSERT INTO staff_works_at (hotel_id, staff_id)" +
+                           "VALUES (1, 5)");
         
-        stmt.executeUpdate("INSERT INTO staff_works_at " +
-                           "VALUES (6, 4)");
+        stmt.executeUpdate("INSERT INTO staff_works_at (hotel_id, staff_id)" +
+                           "VALUES (4, 6)");
         
-        stmt.executeUpdate("INSERT INTO staff_works_at " +
-                           "VALUES (7, 4)");
+        stmt.executeUpdate("INSERT INTO staff_works_at (hotel_id, staff_id)" +
+                           "VALUES (4, 7)");
         
         //Populate the RESERVATIONS table
         // no_of_guests start_date  end_date check_in_time check_out_time total_amount payment_method card_no expiry billing_address has_paid
         
-        stmt.executeUpdate("INSERT INTO reservations " +
-                           "VALUES (1, '10/05/2017', '13/05/2017', '3:17 pm', '10:22 am', 0, 'credit', 1052, NULL, '980 TRT St , Raleigh NC', 'No')");
+        stmt.executeUpdate("INSERT INTO reservations (no_of_guests, start_date,  end_date, check_in_time, check_out_time, total_amount, payment_method, card_no, expiry, billing_address, has_paid)" +
+                           "VALUES (1, '2017-05-10', '2017-05-13', '3:17:00', '10:22:00', 0, 'credit', 1052, NULL, '980 TRT St , Raleigh NC', 0)");
         
-        stmt.executeUpdate("INSERT INTO reservations " +
-                           "VALUES (2, '10/05/2017', '13/05/2017', '4:11 pm', '9:27 am', 0, 'credit', 3020, NULL, '7720 MHT St , Greensboro NC', 'No')");
+        stmt.executeUpdate("INSERT INTO reservations (no_of_guests, start_date,  end_date, check_in_time, check_out_time, total_amount, payment_method, card_no, expiry, billing_address, has_paid)" +
+                           "VALUES (2, '2017-05-10', '2017-05-13', '4:11:00', '9:27:00', 0, 'credit', 3020, NULL, '7720 MHT St , Greensboro NC', 0)");
         
-        stmt.executeUpdate("INSERT INTO reservations " +
-                           "VALUES (1, '10/05/2016', '14/05/2016', 3:45 pm', '11:10 am', 0, 'credit', 2497, NULL, '231 DRY St , Rochester NY 78', 'No')");
+        stmt.executeUpdate("INSERT INTO reservations (no_of_guests, start_date,  end_date, check_in_time, check_out_time, total_amount, payment_method, card_no, expiry, billing_address, has_paid)" +
+                           "VALUES (1, '2016-05-10', '2016-05-14', '3:45:00', '11:10:00', 0, 'credit', 2497, NULL, '231 DRY St , Rochester NY 78', 0)");
         
-        stmt.executeUpdate("INSERT INTO reservations " +
-                           "VALUES (2, '10/05/2018', '12/05/2018', 2:30 pm', '10:00 am', 0, 'cash', NULL, NULL, '24 BST Dr , Dallas TX 14', 'No')");
+        stmt.executeUpdate("INSERT INTO reservations (no_of_guests, start_date,  end_date, check_in_time, check_out_time, total_amount, payment_method, card_no, expiry, billing_address, has_paid)" +
+                           "VALUES (2, '2018-05-10', '2018-05-12', '2:30:00', '10:00:00', 0, 'cash', NULL, NULL, '24 BST Dr , Dallas TX 14', 0)");
         
         //Populate the RESERVATION_FOR table
         //hotel,room.
-        stmt.executeUpdate("INSERT INTO reservation_for " +
+        stmt.executeUpdate("INSERT INTO reservation_for (reservation_id, room_no, hotel_id)" +
                            "VALUES (1, 1, 1)");
-        stmt.executeUpdate("INSERT INTO reservation_for " +
-                           "VALUES (2, 1, 2)");
-        stmt.executeUpdate("INSERT INTO reservation_for " +
-                           "VALUES (3, 2, 3)");
-        stmt.executeUpdate("INSERT INTO reservation_for " +
-                           "VALUES (4, 3, 2)");
+        stmt.executeUpdate("INSERT INTO reservation_for (reservation_id, room_no, hotel_id)" +
+                           "VALUES (2, 2, 1)");
+        stmt.executeUpdate("INSERT INTO reservation_for (reservation_id, room_no, hotel_id)" +
+                           "VALUES (3, 3, 2)");
+        stmt.executeUpdate("INSERT INTO reservation_for (reservation_id, room_no, hotel_id)" +
+                           "VALUES (4, 2, 3)");
         
         //Populate the CUSTOMER_MAKES table
-        stmt.executeUpdate("INSERT INTO customer_makes " +
+        stmt.executeUpdate("INSERT INTO customer_makes (reservation_id, customer_id)" +
                            "VALUES (1, 1)");
-        stmt.executeUpdate("INSERT INTO customer_makes " +
+        stmt.executeUpdate("INSERT INTO customer_makes (reservation_id, customer_id)" +
                            "VALUES (2, 2)");
-        stmt.executeUpdate("INSERT INTO customer_makes " +
+        stmt.executeUpdate("INSERT INTO customer_makes (reservation_id, customer_id)" +
                            "VALUES (3, 3)");
-        stmt.executeUpdate("INSERT INTO customer_makes " +
+        stmt.executeUpdate("INSERT INTO customer_makes (reservation_id, customer_id)" +
                            "VALUES (4, 4)");
         
         //Populate the SERVICES table
-        stmt.executeUpdate("INSERT INTO services " +
+        stmt.executeUpdate("INSERT INTO services (reservation_id, name, price)" +
                            "VALUES (1, 'gyms', 15)");
-        stmt.executeUpdate("INSERT INTO services " +
+        stmt.executeUpdate("INSERT INTO services (reservation_id, name, price)" +
                            "VALUES (1, 'dry cleaning', 16)");
-        stmt.executeUpdate("INSERT INTO services " +
+        stmt.executeUpdate("INSERT INTO services (reservation_id, name, price)" +
                            "VALUES (2, 'gyms', 15)");
-        stmt.executeUpdate("INSERT INTO services " +
+        stmt.executeUpdate("INSERT INTO services (reservation_id, name, price)" +
                            "VALUES (3, 'room service', 10)");
-        stmt.executeUpdate("INSERT INTO services " +
+        stmt.executeUpdate("INSERT INTO services (reservation_id, name, price)" +
                            "VALUES (4, 'phone bills', 5)");
         
         //Populate the STAFF_PROVIDES table
         //reservation - staffID - serviceID
-        stmt.executeUpdate("INSERT INTO staff_provides " +
+        stmt.executeUpdate("INSERT INTO staff_provides (reservation_id, staff_id, service_id)" +
                            "VALUES (1, 4, 1)");
-        stmt.executeUpdate("INSERT INTO staff_provides " +
+        stmt.executeUpdate("INSERT INTO staff_provides (reservation_id, staff_id, service_id)" +
                            "VALUES (1, 5, 2)");
-        stmt.executeUpdate("INSERT INTO staff_provides " +
+        stmt.executeUpdate("INSERT INTO staff_provides (reservation_id, staff_id, service_id)" +
                            "VALUES (2, 4, 3)");
-        stmt.executeUpdate("INSERT INTO staff_provides " +
+        stmt.executeUpdate("INSERT INTO staff_provides (reservation_id, staff_id, service_id)" +
                            "VALUES (3, 2, 4)");
-        stmt.executeUpdate("INSERT INTO staff_provides " +
+        stmt.executeUpdate("INSERT INTO staff_provides (reservation_id, staff_id, service_id)" +
                            "VALUES (4, 3, 5)");
-        }
+    }
 }
