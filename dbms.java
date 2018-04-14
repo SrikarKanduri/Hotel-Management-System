@@ -276,8 +276,7 @@ public class Dbms {
         phone = sc.nextInt();
         System.out.println("Enter manager ID: ");
         mid = sc.nextInt();
-        
-        //        stmt.executeUpdate("INSERT INTO hotels)
+        stmt.executeUpdate("INSERT INTO hotels (name, address, phone, manager_id) VALUES (" + name + "," + address + "," + phone + "," + manager_id + ")");
     }
     
     static void deleteHotel(Statement stmt) throws Exception {
@@ -331,8 +330,7 @@ public class Dbms {
         price = sc.nextDouble();
         System.out.println("Enter availability (0/1): ");
         availability = sc.nextInt();
-        
-        //        stmt.executeUpdate("INSERT INTO hotels)
+
     }
     
     static void deleteRoom(Statement stmt) throws Exception {
@@ -487,8 +485,9 @@ public class Dbms {
     }
     
     static void assignRoom(Statement stmt) throws Exception {
-        String category, dob, email;
-        int hid, cid, phone, ssn;
+        String category, dob, email, sdate, edate, check_in_time, check_out_time, payment_method, card_expiry, billing_address;
+        int hid, cid, phone, ssn, no_of_guests;
+        long card_no;
         ResultSet rs = null;
         Scanner sc = new Scanner(System.in);
         
@@ -505,18 +504,32 @@ public class Dbms {
         if(!rs.isBeforeFirst()) {
             System.out.println("No rooms available\n");
         } else {
-            
+            rs.next();
+            System.out.println("Room no: " + rs.getInt(no) + " is available\n\n");
+            System.out.println("Enter no of guests: ");
+            no_of_guests = sc.nextInt();
+            System.out.println("Enter start date: ");
+            sdate = sc.nextLine();
+            System.out.println("Enter end date: ");
+            edate = sc.nextLine();
+            System.out.println("Enter check-in time: ");
+            check_in_time = sc.nextLine();
+            System.out.println("Enter check-out time: ");
+            check_out_time = sc.nextLine();
+            System.out.println("Enter payment method: ");
+            payment_method = sc.nextLine();
+            if(!payment_method.equals("cash")) {
+                System.out.println("Enter card no: ");
+                card_no = sc.nextLong();
+                System.out.println("Enter expiry: ");
+                card_expiry = sc.nextLine();
+                System.out.println("Enter billing address: ");
+                billing_address = sc.nextLine();
+                stmt.executeUpdate("INSERT INTO reservations (no_of_guests, start_date,  end_date, check_in_time, check_out_time, total_amount, payment_method, card_no, expiry, billing_address, has_paid) VALUES (" + no_of_guests + "," + start_date + "," +  end_date + "," + check_in_time + "," + check_out_time + ",0," + payment_method + "," + card_no + "," + expiry + "," + billing_address + ",0)");
+            }
+        } else {
+            stmt.executeUpdate("INSERT INTO reservations (no_of_guests, start_date,  end_date, check_in_time, check_out_time, total_amount, payment_method, card_no, expiry, billing_address, has_paid) VALUES (" + no_of_guests + "," + start_date + "," +  end_date + "," + check_in_time + "," + check_out_time + ",0," + payment_method + ",NULL, NULL, NULL, 0)");
         }
-        System.out.println("Enter dob: ");
-        dob = sc.nextLine();
-        System.out.println("Enter phone: ");
-        phone = sc.nextInt();
-        System.out.println("Enter email: ");
-        email = sc.nextLine();
-        System.out.println("Enter ssn: ");
-        ssn = sc.nextInt();
-        
-        //        stmt.executeUpdate("INSERT INTO hotels)
     }
     
     static void dropTables(Statement stmt) throws Exception{
@@ -580,8 +593,8 @@ public class Dbms {
         // Create the RESERVATIONS table
         stmt.executeUpdate("CREATE TABLE reservations ( " +
                            "id INT PRIMARY KEY AUTO_INCREMENT, " +
-                           "start_date DATE NOT NULL, " +
                            "no_of_guests INT, " +
+                           "start_date DATE NOT NULL, " +
                            "end_date DATE NOT NULL, " +
                            "check_in_time TIME NOT NULL, " +
                            "check_out_time TIME NOT NULL, " +
