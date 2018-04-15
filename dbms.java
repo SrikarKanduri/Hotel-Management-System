@@ -674,7 +674,7 @@ public class Dbms {
         System.out.println("Enter room category: ");
         category = sc.nextLine();
         
-        String query = "SELECT no FROM rooms WHERE category = " + category + " AND hotel_id = " + hid + " AND is_available = 1";
+        String query = "SELECT no FROM rooms WHERE category = '" + category + "' AND hotel_id = " + hid + " AND is_available = 1";
         rs = stmt.executeQuery(query);
         if(!rs.isBeforeFirst()) {
             System.out.println("No rooms available\n");
@@ -1043,13 +1043,13 @@ public class Dbms {
         
         // Populate the HOTELS table
         stmt.executeUpdate("INSERT INTO hotels (name,address,phone,manager_id)" +
-                           "VALUES ('Hotel A', '21 ABC St , Raleigh NC 27', 919, 1)");
+                           "VALUES ('Hotel A', 'Raleigh NC', 919, 1)");
         stmt.executeUpdate("INSERT INTO hotels (name,address,phone,manager_id)" +
-                           "VALUES ('Hotel B', '25 XYZ St , Rochester NY 54', 718, 2)");
+                           "VALUES ('Hotel B', 'Rochester NY', 718, 2)");
         stmt.executeUpdate("INSERT INTO hotels (name,address,phone,manager_id)" +
-                           "VALUES ('Hotel C', '29 PQR St , Greensboro NC 27', 984, 3)");
+                           "VALUES ('Hotel C', 'Greensboro NC', 984, 3)");
         stmt.executeUpdate("INSERT INTO hotels (name,address,phone,manager_id)" +
-                           "VALUES ('Hotel D', '28 GHW St , Raleigh NC 32', 920, 6)");
+                           "VALUES ('Hotel D', 'Raleigh NC', 920, 6)");
         
         //Populate the ROOMS table
         stmt.executeUpdate("INSERT INTO rooms (no,hotel_id, category, max_occupancy, price, is_available)" +
