@@ -96,7 +96,7 @@ public class Dbms {
         Scanner sc = new Scanner(System.in);
         //        Runtime.getRuntime().exec("clear");
         
-        System.out.println("CEO View\n\n");
+        System.out.println("---------------CEO View---------------\n\n");
         System.out.println("1) Manage hotels\n");
         System.out.println("2) Manage staff\n");
         System.out.println("3) View reports\n");
@@ -152,7 +152,7 @@ public class Dbms {
         Scanner sc = new Scanner(System.in);
         //        Runtime.getRuntime().exec("clear");
         
-        System.out.println("Front Desk Representative View\n\n");
+        System.out.println("---------------Front Desk Representative View---------------\n\n");
         System.out.println("1) Manage customers\n");
         System.out.println("2) Manage room assignment\n");
         System.out.println("3) Manage staff\n");
@@ -757,6 +757,7 @@ public class Dbms {
     }
     
     static void occHotel(Statement stmt) throws Exception {
+        System.out.println("Report: Occupancy by Hotel\n\n");
         ResultSet rs = stmt.executeQuery("SELECT hotel_id, 100 - (100*SUM(is_available)/COUNT(is_available)) AS H_OCC FROM rooms GROUP BY hotel_id");
         
         while(rs.next()) {
@@ -767,6 +768,7 @@ public class Dbms {
     }
     
     static void occRoomType(Statement stmt) throws Exception {
+        System.out.println("Report: Occupancy by Room Type\n\n");
         ResultSet rs = stmt.executeQuery("SELECT category, 100 - (100*SUM(is_available)/COUNT(is_available)) AS R_OCC FROM rooms GROUP BY category");
         
         while(rs.next()) {
@@ -777,6 +779,7 @@ public class Dbms {
     }
     
     static void occDateRange(Statement stmt) throws Exception {
+        System.out.println("Report: Occupancy by Date Range\n\n");
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter Start date: ");
         String start = sc.nextLine();
@@ -789,6 +792,7 @@ public class Dbms {
     }
     
     static void occCity(Statement stmt) throws Exception {
+        System.out.println("Report: Occupancy by City Address\n\n");
         ResultSet rs = stmt.executeQuery("SELECT address AS city, 100 - (100*SUM(is_available)/COUNT(is_available)) AS C_OCC FROM rooms, hotels WHERE hotel_id = id GROUP BY address");
         
         while(rs.next()) {
@@ -799,6 +803,7 @@ public class Dbms {
     }
     
     static void occTotal(Statement stmt) throws Exception {
+        System.out.println("Report: Total occupancy\n\n");
         ResultSet rs = stmt.executeQuery("SELECT COUNT(*) AS TOTAL_OCC, 100*COUNT(*)/(SELECT COUNT(*) FROM rooms) AS PERC FROM reservation_for");
         while(rs.next()) {
             int cnt = rs.getInt("TOTAL_OCC");
@@ -809,6 +814,7 @@ public class Dbms {
     }
     
     static void revenue(Statement stmt) throws Exception {
+        System.out.println("Report: Total revenue by hotel for given date range\n\n");
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter Hotel ID: ");
         int id = sc.nextInt();
@@ -825,6 +831,7 @@ public class Dbms {
     }
     
     static void staffInfoByRole(Statement stmt) throws Exception {
+        System.out.println("Report: Staff information by role\n\n");
         ResultSet rs = stmt.executeQuery("SELECT title, department, COUNT(*) AS cnt FROM staff GROUP BY title, department;");
         while(rs.next()) {
             String title = rs.getString("title");
@@ -835,6 +842,7 @@ public class Dbms {
     }
     
     static void staffInfoByCust(Statement stmt) throws Exception {
+        System.out.println("Report: Staff information by customer served\n\n");
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter Customer ID: ");
         int cid = sc.nextInt();
