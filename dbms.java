@@ -30,7 +30,7 @@ public class Dbms {
                     logout = false;
                     login();
                     while(!logout)
-                        showOperations(stmt);
+                        showOperations(stmt, conn);
                 } while(true);
                 
             } finally {
@@ -74,7 +74,7 @@ public class Dbms {
         //Validate login details?
     }
     
-    static void showOperations(Statement stmt) throws Exception {
+    static void showOperations(Statement stmt, Connection conn) throws Exception {
 
         switch(access_type) {
             case 1:
@@ -84,7 +84,7 @@ public class Dbms {
                 mgrOperations(stmt);
                 break;
             case 3:
-                fdrOperations(stmt);
+                fdrOperations(stmt, conn);
                 break;
             default:
                 System.out.println("Invalid option. Re-enter!\n");
@@ -148,7 +148,7 @@ public class Dbms {
         }
     }
     
-    static void fdrOperations(Statement stmt) throws Exception {
+    static void fdrOperations(Statement stmt, Connection conn) throws Exception {
         Scanner sc = new Scanner(System.in);
         //        Runtime.getRuntime().exec("clear");
         
@@ -168,7 +168,7 @@ public class Dbms {
                 manageCustomers(stmt);
                 break;
             case 2:
-                assignRoom(stmt);
+                assignRoom(stmt, conn);
                 break;
             case 3:
                 manageStaff(stmt);
@@ -177,7 +177,7 @@ public class Dbms {
                 manageServices(stmt);
                 break;
             case 5:
-                generateBill(stmt);
+                generateBill(stmt, conn);
                 break;
             default:
                 System.out.println("Logging out...\n");
@@ -657,7 +657,7 @@ public class Dbms {
         stmt.executeUpdate("UPDATE staff_provides SET reservation_id =" + reservation_id + ",staff_id = " + staff_id + "WHERE service_id = " + service_id + ")");
     }
     
-    static void assignRoom(Statement stmt) throws Exception {
+    static void assignRoom(Statement stmt, Connection conn) throws Exception {
         String category, dob, email, start_date, end_date, check_in_time, check_out_time, payment_method, expiry, billing_address;
         int hid, cid, phone, ssn, no_of_guests, reservation_id;
         long card_no;
@@ -679,23 +679,25 @@ public class Dbms {
         if(!rs.isBeforeFirst()) {
             System.out.println("No rooms available\n");
         } else {
-            rs.next();
-            int no = rs.getInt("no");
-            System.out.println("Room no: " + no + " is available\n\n");
-            System.out.println("Enter no of guests: ");
-            no_of_guests = sc.nextInt();
-            sc.nextLine();
-            System.out.println("Enter start date: ");
-            start_date = sc.nextLine();
-            System.out.println("Enter end date: ");
-            end_date = sc.nextLine();
-            System.out.println("Enter check-in time: ");
-            check_in_time = sc.nextLine();
-            System.out.println("Enter check-out time: ");
-            check_out_time = sc.nextLine();
-            System.out.println("Enter payment method: ");
-            payment_method = sc.nextLine();
-            if(!payment_method.equals("cash")) {
+            conn.setAutoCommit(false);
+            try {
+              rs.next();
+              int no = rs.getInt("no");
+              System.out.println("Room no: " + no + " is available\n\n");
+              System.out.println("Enter no of guests: ");
+              no_of_guests = sc.nextInt();
+              sc.nextLine();
+              System.out.println("Enter start date: ");
+              start_date = sc.nextLine();
+              System.out.println("Enter end date: ");
+              end_date = sc.nextLine();
+              System.out.println("Enter check-in time: ");
+              check_in_time = sc.nextLine();
+              System.out.println("Enter check-out time: ");
+              check_out_time = sc.nextLine();
+              System.out.println("Enter payment method: ");
+              payment_method = sc.nextLine();
+              if(!payment_method.equals("cash")) {
                 System.out.println("Enter card no: ");
                 card_no = sc.nextLong();
                 System.out.println("Enter expiry: ");
@@ -703,18 +705,28 @@ public class Dbms {
                 System.out.println("Enter billing address: ");
                 billing_address = sc.nextLine();
                 stmt.executeUpdate("INSERT INTO reservations (no_of_guests, start_date,  end_date, check_in_time, check_out_time, total_amount, payment_method, card_no, expiry, billing_address, has_paid) VALUES (" + no_of_guests + ",\"" + start_date + "\",\"" +  end_date + "\",\"" + check_in_time + "\",\"" + check_out_time + "\",0,\"" + payment_method + "\"," + card_no + ",\"" + expiry + "\",\"" + billing_address + "\",0)", Statement.RETURN_GENERATED_KEYS);
-            } else {
+              } else {
                 stmt.executeUpdate("INSERT INTO reservations (no_of_guests, start_date,  end_date, check_in_time, check_out_time, total_amount, payment_method, card_no, expiry, billing_address, has_paid) VALUES (" + no_of_guests + ",\"" + start_date + "\",\"" +  end_date + "\",\"" + check_in_time + "\",\"" + check_out_time + "\",0,\"" + payment_method + "\""+",NULL, NULL, NULL, 0)", Statement.RETURN_GENERATED_KEYS);
-            }
-            rs = stmt.getGeneratedKeys();
-            rs.next();
-            reservation_id = rs.getInt(1);
-            stmt.executeUpdate("INSERT INTO customer_makes(reservation_id, customer_id) VALUES (" + reservation_id + "," + cid + ")");
-            stmt.executeUpdate("INSERT INTO reservation_for(reservation_id, hotel_id, room_no) VALUES(" + reservation_id + "," + hid + "," + no + ")");
-            stmt.executeUpdate("UPDATE rooms SET is_available = 0 WHERE hotel_id =  " + hid + " AND no = " + no);
-            System.out.println("Room reservation success!");
+              }
+              rs = stmt.getGeneratedKeys();
+              rs.next();
+              reservation_id = rs.getInt(1);
+              stmt.executeUpdate("INSERT INTO customer_makes(reservation_id, customer_id) VALUES (" + reservation_id + "," + cid + ")");
+              stmt.executeUpdate("INSERT INTO reservation_for(reservation_id, hotel_id, room_no) VALUES(" + reservation_id + "," + hid + "," + no + ")");
+              stmt.executeUpdate("UPDATE rooms SET is_available = 0 WHERE hotel_id =  " + hid + " AND no = " + no);
+              System.out.println("Room reservation success!");
+              conn.commit();
+           //   conn.setAutoCommit(true);
+          }
+          catch(Exception e) {
+            conn.rollback();
+          }
+          finally {
+            conn.setAutoCommit(true);
+          }
         }
     }
+
     
     static void generateBill(Statement stmt) throws Exception {
         int hotel_id, reservation_id, no;
@@ -729,34 +741,44 @@ public class Dbms {
         no = sc.nextInt();
         sc.nextLine();
 
-        stmt.executeUpdate("UPDATE reservations SET total_amount = (SELECT SUM(price) FROM services WHERE reservation_id IN (SELECT reservation_id FROM reservation_for WHERE room_no = " + no + " AND hotel_id = " + hotel_id + ")) + (SELECT price FROM rooms WHERE no = " + no + " AND hotel_id = " + hotel_id + ") WHERE id IN (SELECT reservation_id FROM reservation_for WHERE room_no = " + no + " AND hotel_id = " + hotel_id + ")");
-        stmt.executeUpdate("UPDATE reservations SET total_amount = " +
+        conn.setAutoCommit(false);
+        try {
+          stmt.executeUpdate("UPDATE reservations SET total_amount = (SELECT SUM(price) FROM services WHERE reservation_id IN (SELECT reservation_id FROM reservation_for WHERE room_no = " + no + " AND hotel_id = " + hotel_id + ")) + (SELECT price FROM rooms WHERE no = " + no + " AND hotel_id = " + hotel_id + ") WHERE id IN (SELECT reservation_id FROM reservation_for WHERE room_no = " + no + " AND hotel_id = " + hotel_id + ")");
+          stmt.executeUpdate("UPDATE reservations SET total_amount = " +
                            "CASE WHEN payment_method = \"hotel credit\" THEN (total_amount * 0.95) ELSE (total_amount) END WHERE has_paid = 0");
-        rs = stmt.executeQuery("SELECT reservation_id FROM reservation_for WHERE room_no =" + no + " AND hotel_id = " + hotel_id);
-        rs.next();
-        reservation_id = rs.getInt("reservation_id");
-        //Itemized receipt
-        rs = stmt.executeQuery("SELECT price FROM rooms WHERE no = " + no + " AND hotel_id = " + hotel_id);
-        rs.next();
-        System.out.println("-----------RECEIPT-----------\n");
-        System.out.println("Room price: " + rs.getDouble("price"));
-        rs = stmt.executeQuery("SELECT name, price FROM services WHERE reservation_id = " + reservation_id);
-        while(rs.next()) {
-            String name = rs.getString("name");
-            double price = rs.getDouble("price");
-            System.out.println("\n" + name + ": "+ price);
+          rs = stmt.executeQuery("SELECT reservation_id FROM reservation_for WHERE room_no =" + no + " AND hotel_id = " + hotel_id);
+          rs.next();
+          reservation_id = rs.getInt("reservation_id");
+          //Itemized receipt
+          rs = stmt.executeQuery("SELECT price FROM rooms WHERE no = " + no + " AND hotel_id = " + hotel_id);
+          rs.next();
+          System.out.println("-----------RECEIPT-----------\n");
+          System.out.println("Room price: " + rs.getDouble("price"));
+          rs = stmt.executeQuery("SELECT name, price FROM services WHERE reservation_id = " + reservation_id);
+          while(rs.next()) {
+              String name = rs.getString("name");
+              double price = rs.getDouble("price");
+              System.out.println("\n" + name + ": "+ price);
+          }
+          //Total amount
+          rs = stmt.executeQuery("SELECT total_amount FROM reservations WHERE id = " + reservation_id);
+          rs.next();
+          System.out.println("\n\tTotal: " + rs.getDouble("total_amount"));
+          stmt.executeUpdate("UPDATE rooms SET is_available = 1 WHERE hotel_id = " + hotel_id + " AND no = " + no);
+          stmt.executeUpdate("UPDATE reservations SET has_paid = 1 WHERE has_paid = 0 AND id = " + reservation_id);
+          //Delete from reservation_for
+          stmt.executeQuery("DELETE FROM reservation_for WHERE reservation_id = " + reservation_id);
+          System.out.println("\nCheck-out success!");
+          conn.commit();
         }
-        //Total amount
-        rs = stmt.executeQuery("SELECT total_amount FROM reservations WHERE id = " + reservation_id);
-        rs.next();
-        System.out.println("\n\tTotal: " + rs.getDouble("total_amount"));
-        stmt.executeUpdate("UPDATE rooms SET is_available = 1 WHERE hotel_id = " + hotel_id + " AND no = " + no);
-        stmt.executeUpdate("UPDATE reservations SET has_paid = 1 WHERE has_paid = 0 AND id = " + reservation_id);
-        //Delete from reservation_for
-        stmt.executeQuery("DELETE FROM reservation_for WHERE reservation_id = " + reservation_id);
-        System.out.println("\nCheck-out success!");
+        catch(Exception e) {
+          conn.rollback();
+        }
+        finally {
+          conn.setAutoCommit(true);
+        }
     }
-    
+   
     static void occHotel(Statement stmt) throws Exception {
         System.out.println("Report: Occupancy by Hotel\n\n");
         ResultSet rs = stmt.executeQuery("SELECT hotel_id, 100 - (100*SUM(is_available)/COUNT(is_available)) AS H_OCC FROM rooms GROUP BY hotel_id");
