@@ -684,6 +684,7 @@ public class Dbms {
             System.out.println("Room no: " + no + " is available\n\n");
             System.out.println("Enter no of guests: ");
             no_of_guests = sc.nextInt();
+            sc.nextLine();
             System.out.println("Enter start date: ");
             start_date = sc.nextLine();
             System.out.println("Enter end date: ");
@@ -710,7 +711,7 @@ public class Dbms {
             reservation_id = rs.getInt(1);
             stmt.executeUpdate("INSERT INTO customer_makes(reservation_id, customer_id) VALUES (" + reservation_id + "," + cid + ")");
             stmt.executeUpdate("INSERT INTO reservation_for(reservation_id, hotel_id, room_no) VALUES(" + reservation_id + "," + hid + "," + no + ")");
-            stmt.executeUpdate("UPDATE rooms SET is_available = 0 WHERE hotel_id = " + hid + "AND no =" + no + ")");
+            stmt.executeUpdate("UPDATE rooms SET is_available = 0 WHERE hotel_id =  " + hid + " AND no = " + no);
             System.out.println("Room reservation success!");
         }
     }
@@ -1053,11 +1054,11 @@ public class Dbms {
         
         //Populate the ROOMS table
         stmt.executeUpdate("INSERT INTO rooms (no,hotel_id, category, max_occupancy, price, is_available)" +
-                           "VALUES ( 1, 1, 'Economy', 1, 100, 1)");
+                           "VALUES ( 1, 1, 'Economy', 1, 100, 0)");
         stmt.executeUpdate("INSERT INTO rooms (no,hotel_id, category, max_occupancy, price, is_available)" +
-                           "VALUES ( 2, 1, 'Deluxe', 2, 200, 1)");
+                           "VALUES ( 2, 1, 'Deluxe', 2, 200, 0)");
         stmt.executeUpdate("INSERT INTO rooms (no,hotel_id, category, max_occupancy, price, is_available)" +
-                           "VALUES ( 3, 2, 'Economy', 1, 100, 1)");
+                           "VALUES ( 3, 2, 'Economy', 1, 100, 0)");
         stmt.executeUpdate("INSERT INTO rooms (no,hotel_id, category, max_occupancy, price, is_available)" +
                            "VALUES ( 2, 3, 'Executive', 3, 1000, 0)");
         stmt.executeUpdate("INSERT INTO rooms (no,hotel_id, category, max_occupancy, price, is_available)" +
