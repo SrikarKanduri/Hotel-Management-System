@@ -322,8 +322,8 @@ public class Dbms {
         System.out.println("Delete a Hotel\n\n");
         System.out.println("Enter ID: ");
         id = sc.nextInt();
-        
-        //        stmt.executeUpdate("INSERT INTO hotels)
+
+        stmt.executeUpdate("DELETE FROM hotels where id ="+ id);
     }
     
     static void updateHotel(Statement stmt) throws Exception {
@@ -345,7 +345,7 @@ public class Dbms {
         System.out.println("Enter new manager ID: ");
         mid = sc.nextInt();
         
-        //        stmt.executeUpdate("INSERT INTO hotels)
+        stmt.executeUpdate("UPDATE hotels SET name = \"" + name + "\", address = \"" + address + "\", phone = " + phone + ",manager_id = " + mid + " WHERE id =" + id);
     }
     
     static void addRoom(Statement stmt) throws Exception {
