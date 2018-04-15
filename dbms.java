@@ -729,7 +729,7 @@ public class Dbms {
     }
 
     
-    static void generateBill(Statement stmt) throws Exception {
+    static void generateBill(Statement stmt, Connection conn) throws Exception {
         int hotel_id, reservation_id, no;
         Scanner sc = new Scanner(System.in);
         ResultSet rs = null;
