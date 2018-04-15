@@ -472,12 +472,11 @@ public class Dbms {
         availability = sc.nextInt();
         stmt.executeUpdate("UPDATE staff set name =\"" + name + "\", age=" + age + "," + "title = \"" + title + "\"," + "department=\"" + dept + "\"," + "phone=" + phone + "," + "address=\"" + address + "\", availability=" + availability + " Where id =" + id);
     }
-    
     static void addCustomer(Statement stmt) throws Exception {
         String name, dob, email;
         int phone, ssn;
         Scanner sc = new Scanner(System.in);
-        
+
         System.out.println("Add Customer\n\n");
         System.out.println("Enter name: ");
         name = sc.nextLine();
@@ -485,45 +484,46 @@ public class Dbms {
         dob = sc.nextLine();
         System.out.println("Enter phone: ");
         phone = sc.nextInt();
+        sc.nextLine();
         System.out.println("Enter email: ");
         email = sc.nextLine();
         System.out.println("Enter ssn: ");
         ssn = sc.nextInt();
-        
-        //        stmt.executeUpdate("INSERT INTO hotels)
+
+        stmt.executeUpdate("INSERT INTO customers (name, dob, phone, email, ssn) VALUES (\"" + name + "\",\"" + dob + "\"," + phone + ",\"" + email + "\"," + ssn + ")");
     }
-    
+
     static void deleteCustomer(Statement stmt) throws Exception {
         int id;
         Scanner sc = new Scanner(System.in);
-        
+
         System.out.println("Delete Customer\n\n");
         System.out.println("Enter ID: ");
         id = sc.nextInt();
-        
-        //        stmt.executeUpdate("INSERT INTO hotels)
+        stmt.executeUpdate("DELETE FROM customers where id ="+ id);
     }
     
     static void updateCustomer(Statement stmt) throws Exception {
         String name, dob, email;
         int id, phone, ssn;
         Scanner sc = new Scanner(System.in);
-        
+
         System.out.println("Update Customer\n\n");
         System.out.println("Enter customer ID: ");
         id = sc.nextInt();
+        sc.nextLine();
         System.out.println("Enter name: ");
         name = sc.nextLine();
         System.out.println("Enter dob: ");
         dob = sc.nextLine();
         System.out.println("Enter phone: ");
         phone = sc.nextInt();
+        sc.nextLine();
         System.out.println("Enter email: ");
         email = sc.nextLine();
         System.out.println("Enter ssn: ");
         ssn = sc.nextInt();
-        
-        //        stmt.executeUpdate("INSERT INTO hotels)
+        stmt.executeUpdate("UPDATE customers set name =\"" + name + "\"," + "dob = \"" + dob + "\"," + "phone=" + phone + "," + "email=\"" + email + "\"," + "ssn=" + ssn + " Where id =" + id);
     }
     
     static void assignRoom(Statement stmt) throws Exception {
