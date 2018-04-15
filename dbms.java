@@ -4,6 +4,7 @@ import java.util.*;
 
 public class Dbms {
     static int access_type;
+    static boolean logout;
     
     static final String jdbcURL = "jdbc:mariadb://classdb2.csc.ncsu.edu:3306/skandur";
     
@@ -25,8 +26,12 @@ public class Dbms {
                 dropTables(stmt);
                 createTables(stmt);
                 populateDemoData(stmt);
-                login();
-                showOperations(stmt);
+                do {
+                    logout = false;
+                    login();
+                    while(!logout)
+                        showOperations(stmt);
+                } while(true);
                 
             } finally {
                 close(rs);
@@ -58,6 +63,8 @@ public class Dbms {
     
     static void login() {
         Scanner sc = new Scanner(System.in);
+        System.out.print("\033[H\033[2J");
+
         System.out.println("Login as:\n\n");
         System.out.println("1) CEO\n");
         System.out.println("2) Manager\n");
@@ -68,6 +75,7 @@ public class Dbms {
     }
     
     static void showOperations(Statement stmt) throws Exception {
+
         switch(access_type) {
             case 1:
                 ceoOperations(stmt);
@@ -79,7 +87,9 @@ public class Dbms {
                 fdrOperations(stmt);
                 break;
             default:
-            System.out.println("Invalid option. Re-enter!\n");        }
+                System.out.println("Invalid option. Re-enter!\n");
+                logout = true;
+        }
     }
     
     static void ceoOperations(Statement stmt) throws Exception {
@@ -90,7 +100,10 @@ public class Dbms {
         System.out.println("1) Manage hotels\n");
         System.out.println("2) Manage staff\n");
         System.out.println("3) View reports\n");
+        System.out.println("Any other number to logout\n");
         int option = sc.nextInt();
+        System.out.print("\033[H\033[2J");
+
         switch(option) {
             case 1:
                 manageHotels(stmt);
@@ -102,7 +115,8 @@ public class Dbms {
                 viewReports(stmt);
                 break;
             default:
-                System.out.println("Invalid option. Re-enter!\n");
+                System.out.println("Logging out...\n");
+                logout = true;
         }
     }
     
@@ -110,11 +124,14 @@ public class Dbms {
         Scanner sc = new Scanner(System.in);
         //        Runtime.getRuntime().exec("clear");
         
-        System.out.println("Manager View\n\n");
+        System.out.println("---------------Manager View---------------\n\n");
         System.out.println("1) Manage rooms\n");
         System.out.println("2) Manage staff\n");
         System.out.println("3) View reports\n");
+        System.out.println("Any other number to logout\n");
         int option = sc.nextInt();
+        System.out.print("\033[H\033[2J");
+
         switch(option) {
             case 1:
                 manageRooms(stmt);
@@ -126,7 +143,8 @@ public class Dbms {
                 viewReports(stmt);
                 break;
             default:
-                System.out.println("Invalid option. Re-enter!\n");
+                System.out.println("Logging out...\n");
+                logout = true;
         }
     }
     
@@ -140,8 +158,11 @@ public class Dbms {
         System.out.println("3) Manage staff\n");
         System.out.println("4) Add service\n");
         System.out.println("5) Check-out\n");
+        System.out.println("Any other number to logout\n");
         
         int option = sc.nextInt();
+        System.out.print("\033[H\033[2J");
+
         switch(option) {
             case 1:
                 manageCustomers(stmt);
@@ -154,11 +175,13 @@ public class Dbms {
                 break;
             case 4:
                 manageServices(stmt);
+                break;
             case 5:
                 generateBill(stmt);
                 break;
             default:
-                System.out.println("Invalid option. Re-enter!\n");
+                System.out.println("Logging out...\n");
+                logout = true;
         }
     }
     
@@ -172,6 +195,8 @@ public class Dbms {
         System.out.println("3) Update hotel's info\n");
         
         int option = sc.nextInt();
+        System.out.print("\033[H\033[2J");
+
         switch(option) {
             case 1:
                 addHotel(stmt);
@@ -197,6 +222,8 @@ public class Dbms {
         System.out.println("3) Update room info\n");
         
         int option = sc.nextInt();
+        System.out.print("\033[H\033[2J");
+
         switch(option) {
             case 1:
                 addRoom(stmt);
@@ -222,6 +249,8 @@ public class Dbms {
         System.out.println("2) Delete staff\n");
         System.out.println("3) Update staff's info\n");
         int option = sc.nextInt();
+        System.out.print("\033[H\033[2J");
+
         switch(option) {
             case 1:
                 addStaff(stmt);
@@ -247,6 +276,8 @@ public class Dbms {
         System.out.println("2) Delete customer\n");
         System.out.println("3) Update customer's info\n");
         int option = sc.nextInt();
+        System.out.print("\033[H\033[2J");
+
         switch(option) {
             case 1:
                 addCustomer(stmt);
@@ -271,6 +302,8 @@ public class Dbms {
         System.out.println("1) Add new service\n");
         System.out.println("2) Update service info\n");
         int option = sc.nextInt();
+        System.out.print("\033[H\033[2J");
+
         switch(option) {
             case 1:
                 addService(stmt);
@@ -297,6 +330,8 @@ public class Dbms {
         System.out.println("7) Staff info by role\n");
         System.out.println("8) Staff info serving a customer\n");
         int option = sc.nextInt();
+        System.out.print("\033[H\033[2J");
+
         switch(option) {
             case 1:
                 occHotel(stmt);
@@ -783,7 +818,7 @@ public class Dbms {
         System.out.println("Enter End date: ");
         String end = sc.nextLine();
         
-        ResultSet rs = stmt.executeQuery("SELECT SUM(total_amount) AS Revenue FROM reservations r INNER JOIN reservation_for rf ON r.id = rf.reservation_id WHERE end_date BETWEEN '" + start + "' AND '" + end + "' AND hotel_id =" + id );
+        ResultSet rs = stmt.executeQuery("SELECT SUM(total_amount) AS Revenue FROM reservations r INNER JOIN reservation_for rf ON r.id = rf.reservation_id WHERE end_date BETWEEN '" + start + "' AND '" + end + "' AND hotel_id =" + id);
         rs.next();
         int total = rs.getInt("Revenue");
         System.out.println("Total Revenue: $" + total);
