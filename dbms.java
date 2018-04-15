@@ -533,22 +533,25 @@ public class Dbms {
         stmt.executeUpdate("UPDATE customers set name =\"" + name + "\"," + "dob = \"" + dob + "\"," + "phone=" + phone + "," + "email=\"" + email + "\"," + "ssn=" + ssn + " Where id =" + id);
     }
     
-    static void assignRoom(Statement stmt) throws Exception {
+static void assignRoom(Statement stmt) throws Exception {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String category, dob, email, start_date, end_date, check_in_time, check_out_time, payment_method, expiry, billing_address;
         int hid, cid, phone, ssn, no_of_guests, reservation_id;
         long card_no;
-        ResultSet rs = null;
+        ResultSet rs = null,rrs=null;
         Scanner sc = new Scanner(System.in);
         
         System.out.println("Assign Room\n\n");
         System.out.println("Enter hotel ID: ");
         hid = sc.nextInt();
+        sc.nextLine();
         System.out.println("Enter customer ID: ");
         cid = sc.nextInt();
+        sc.nextLine();
         System.out.println("Enter room category: ");
         category = sc.nextLine();
         
-        String query = "SELECT no FROM rooms WHERE category = " + category + " AND hotel_id = " + hid + " AND is_available = 1";
+        String query = "SELECT no FROM rooms WHERE category = \"" + category + "\" AND hotel_id = " + hid + " AND is_available = 1";
         rs = stmt.executeQuery(query);
         if(!rs.isBeforeFirst()) {
             System.out.println("No rooms available\n");
@@ -558,6 +561,7 @@ public class Dbms {
             System.out.println("Room no: " + no + " is available\n\n");
             System.out.println("Enter no of guests: ");
             no_of_guests = sc.nextInt();
+            sc.nextLine();
             System.out.println("Enter start date: ");
             start_date = sc.nextLine();
             System.out.println("Enter end date: ");
@@ -571,6 +575,7 @@ public class Dbms {
             if(!payment_method.equals("cash")) {
                 System.out.println("Enter card no: ");
                 card_no = sc.nextLong();
+                sc.nextLine();
                 System.out.println("Enter expiry: ");
                 expiry = sc.nextLine();
                 System.out.println("Enter billing address: ");
@@ -579,9 +584,15 @@ public class Dbms {
             } else {
                 reservation_id = stmt.executeUpdate("INSERT INTO reservations (no_of_guests, start_date,  end_date, check_in_time, check_out_time, total_amount, payment_method, card_no, expiry, billing_address, has_paid) VALUES (" + no_of_guests + ",\"" + start_date + "\",\"" +  end_date + "\",\"" + check_in_time + "\",\"" + check_out_time + "\",0,\"" + payment_method + "\""+",NULL, NULL, NULL, 0)", Statement.RETURN_GENERATED_KEYS);
             }
+            System.out.println("Reservation id ;"+reservation_id);
+            rrs = stmt.getGeneratedKeys();
+            if (rrs.next()){
+                reservation_id=rrs.getInt(1);
+            }
+            System.out.println("Reservation id ;"+reservation_id);
         stmt.executeUpdate("INSERT INTO customer_makes(reservation_id, customer_id) VALUES (" + reservation_id + "," + cid + ")");
         stmt.executeUpdate("INSERT INTO reservation_for(reservation_id, hotel_id, room_no) VALUES(" + reservation_id + "," + hid + "," + no + ")");
-        stmt.executeUpdate("UPDATE rooms SET is_available = 0 WHERE hotel_id = " + hid + "AND no =" + no + ")");
+        stmt.executeUpdate("UPDATE rooms SET is_available = 0 WHERE hotel_id = " + hid + " AND no =" + no );
         System.out.println("Room reservation success!");
         }
     }
