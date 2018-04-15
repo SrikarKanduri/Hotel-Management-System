@@ -315,6 +315,7 @@ public class Dbms {
                 break;
             case 6:
                 revenue(stmt);
+                break;
             case 7:
                 staffInfoByRole(stmt);
                 break;
@@ -782,7 +783,7 @@ public class Dbms {
         System.out.println("Enter End date: ");
         String end = sc.nextLine();
         
-        ResultSet rs = stmt.executeQuery("SELECT SUM(total_amount) AS Revenue FROM reservations r INNER JOIN reservation_for rf ON r.id = rf.reservation_id WHERE end_date BETWEEN '" + start + "' AND '" + end + "' AND hotel_id =" + id +")");
+        ResultSet rs = stmt.executeQuery("SELECT SUM(total_amount) AS Revenue FROM reservations r INNER JOIN reservation_for rf ON r.id = rf.reservation_id WHERE end_date BETWEEN '" + start + "' AND '" + end + "' AND hotel_id =" + id );
         rs.next();
         int total = rs.getInt("Revenue");
         System.out.println("Total Revenue: $" + total);
@@ -803,7 +804,7 @@ public class Dbms {
         System.out.println("Enter Customer ID: ");
         int cid = sc.nextInt();
         
-        ResultSet rs = stmt.executeQuery("SELECT id, name, title, department, address, phone, availability, age FROM staff INNER JOIN staff_provides s ON id = staff_id INNER JOIN customer_makes c ON s.reservation_id = c.reservation_id WHERE customer_id =" + cid + ")");
+        ResultSet rs = stmt.executeQuery("SELECT id, name, title, department, address, phone, availability, age FROM staff INNER JOIN staff_provides s ON id = staff_id INNER JOIN customer_makes c ON s.reservation_id = c.reservation_id WHERE customer_id =" + cid);
         while(rs.next()) {
             int id = rs.getInt("id");
             String name = rs.getString("name");
