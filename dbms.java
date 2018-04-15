@@ -146,7 +146,7 @@ public class Dbms {
         System.out.println("1) Manage customers\n");
         System.out.println("2) Manage room assignment\n");
         System.out.println("3) Manage staff\n");
-        System.out.println("4) View reports\n");
+        System.out.println("4) Generate bill\n");
         int option = sc.nextInt();
         switch(option) {
             case 1:
@@ -159,7 +159,7 @@ public class Dbms {
                 manageStaff(stmt);
                 break;
             case 4:
-                viewReports(stmt);
+                generateBill(stmt);
                 break;
             default:
                 System.out.println("Invalid option. Re-enter!\n");
@@ -254,12 +254,46 @@ public class Dbms {
     }
     
     static void viewReports(Statement stmt) throws Exception {
+        Scanner sc = new Scanner(System.in);
 //        Runtime.getRuntime().exec("clear");
         
         System.out.println("View Reports\n\n");
-        System.out.println("1) Revenue earned\n");
-        System.out.println("2) Delete a hotel\n");
-        System.out.println("3) Update hotel's info\n");
+        System.out.println("1) Occupancy by hotel\n");
+        System.out.println("2) Occupancy by room type\n");
+        System.out.println("3) Occupancy by date range\n");
+        System.out.println("4) Occupancy by city\n");
+        System.out.println("5) Total Hotel occupancy\n");
+        System.out.println("6) Hotel revenue in a date range\n");
+        System.out.println("7) Staff info by role\n");
+        System.out.println("8) Staff info serving a customer\n");
+        int option = sc.nextInt();
+        switch(option) {
+            case 1:
+                occHotel(stmt);
+                break;
+            case 2:
+                occRoomType(stmt);
+                break;
+            case 3:
+                occDateRange(stmt);
+                break;
+            case 4:
+                occCity(stmt);
+                break;
+            case 5:
+                occTotal(stmt);
+                break;
+            case 6:
+                revenue(stmt);
+            case 7:
+                staffInfoByRole(stmt);
+                break;
+            case 8:
+                staffInfoByCust(stmt);
+                break;
+            default:
+                System.out.println("Invalid option. Re-enter!\n");
+        }
     }
     
     static void addHotel(Statement stmt) throws Exception {
@@ -367,8 +401,6 @@ public class Dbms {
         
         //        stmt.executeUpdate("INSERT INTO hotels)
     }
-    
-    
     
     static void addStaff(Statement stmt) throws Exception {
         String name, title, dept, address;
@@ -486,7 +518,7 @@ public class Dbms {
     
     static void assignRoom(Statement stmt) throws Exception {
         String category, dob, email, sdate, edate, check_in_time, check_out_time, payment_method, card_expiry, billing_address;
-        int hid, cid, phone, ssn, no_of_guests;
+        int hid, cid, phone, ssn, no_of_guests, reservation_id;
         long card_no;
         ResultSet rs = null;
         Scanner sc = new Scanner(System.in);
@@ -505,7 +537,8 @@ public class Dbms {
             System.out.println("No rooms available\n");
         } else {
             rs.next();
-            System.out.println("Room no: " + rs.getInt(no) + " is available\n\n");
+            int no = rs.getInt(no);
+            System.out.println("Room no: " + no + " is available\n\n");
             System.out.println("Enter no of guests: ");
             no_of_guests = sc.nextInt();
             System.out.println("Enter start date: ");
@@ -525,13 +558,139 @@ public class Dbms {
                 card_expiry = sc.nextLine();
                 System.out.println("Enter billing address: ");
                 billing_address = sc.nextLine();
-                stmt.executeUpdate("INSERT INTO reservations (no_of_guests, start_date,  end_date, check_in_time, check_out_time, total_amount, payment_method, card_no, expiry, billing_address, has_paid) VALUES (" + no_of_guests + "," + start_date + "," +  end_date + "," + check_in_time + "," + check_out_time + ",0," + payment_method + "," + card_no + "," + expiry + "," + billing_address + ",0)");
+                reservation_id = stmt.executeUpdate("INSERT INTO reservations (no_of_guests, start_date,  end_date, check_in_time, check_out_time, total_amount, payment_method, card_no, expiry, billing_address, has_paid) VALUES (" + no_of_guests + "," + start_date + "," +  end_date + "," + check_in_time + "," + check_out_time + ",0," + payment_method + "," + card_no + "," + expiry + "," + billing_address + ",0)", Statement.RETURN_GENERATED_KEYS);
+            } else {
+                stmt.executeUpdate("INSERT INTO reservations (no_of_guests, start_date,  end_date, check_in_time, check_out_time, total_amount, payment_method, card_no, expiry, billing_address, has_paid) VALUES (" + no_of_guests + "," + start_date + "," +  end_date + "," + check_in_time + "," + check_out_time + ",0," + payment_method + ",NULL, NULL, NULL, 0)", Statement.RETURN_GENERATED_KEYS);
             }
-        } else {
-            stmt.executeUpdate("INSERT INTO reservations (no_of_guests, start_date,  end_date, check_in_time, check_out_time, total_amount, payment_method, card_no, expiry, billing_address, has_paid) VALUES (" + no_of_guests + "," + start_date + "," +  end_date + "," + check_in_time + "," + check_out_time + ",0," + payment_method + ",NULL, NULL, NULL, 0)");
+        stmt.executeUpdate("INSERT INTO customer_makes(reservation_id, customer_id) VALUES (" + reservation_id + "," + cid + ")");
+        stmt.executeUpdate("INSERT INTO reservation_for(reservation_id, hotel_id, room_no) VALUES(" + reservation_id + "," + hid + "," + no + ")");
+        stmt.executeUpdate("UPDATE rooms SET is_available = 0 WHERE hotel_id = " + hid + "AND no =" + no + ")");
+        System.out.println("Room reservation success!");
         }
     }
     
+    static void generateBill(Statement stmt) throws Exception {
+        int id, no;
+        Scanner sc = new Scanner(System.in);
+        ResultSet rs = null;
+        
+        System.out.println("Generate Bill\n\n");
+        System.out.println("Enter hotel ID: ");
+        id = sc.nextInt();
+        System.out.println("Enter room no: ");
+        no = sc.nextInt();
+        
+        stmt.executeUpdate("UPDATE reservations SET total_amount = (SELECT SUM(price) FROM services WHERE reservation_id IN (SELECT reservation_id FROM reservation_for WHERE room_no = " + no + " AND hotel_id = " + hotel_id + ")) + (SELECT price FROM rooms WHERE no = " + no + " AND hotel_id = " + hotel_id + ") WHERE id IN (SELECT reservation_id FROM reservation_for WHERE room_no = " + no + " AND hotel_id = " + hotel_id + ")");
+        stmt.executeUpdate("UPDATE reservations SET total_amount = " + "CASE WHEN payment_method = ‘hotel card’ THEN (total_amount * 0.95) END WHERE has_paid = 0");
+        //print services here
+        rs = stmt.executeQuery("SELECT total_amount FROM reservations WHERE id IN (SELECT reservation_id FROM reservation_for WHERE room_no =" + no + "AND hotel_id = " + id +")");
+        rs.next();
+        System.out.println("\nTotal: " + rs.getDouble("total_amount"));
+    }
+
+    static void occHotel(Statement stmt) throws Exception {
+        ResultSet rs = stmt.executeQuery("SELECT hotel_id, 100 – (100*SUM(is_available)/COUNT(is_available)) AS H_OCC FROM rooms GROUP BY hotel_id");
+        
+        while(rs.next()) {
+            int id = rs.getInt("hotel_id");
+            double occ = rs.getDouble("H_OCC");
+            System.out.println("Occupancy of Hotel #" + id + ": "+ occ + "%\n");
+        }
+    }
+    
+    static void occRoomType(Statement stmt) throws Exception {
+        ResultSet rs = stmt.executeQuery("SELECT category, 100 – (100*SUM(is_available)/COUNT(is_available)) AS R_OCC FROM rooms GROUP BY category");
+        
+        while(rs.next()) {
+            String category = rs.getInt("category");
+            double occ = rs.getDouble("R_OCC");
+            System.out.println("Occupancy of Room Type '" + category + "': "+ occ + "%\n");
+        }
+    }
+
+    static void occDateRange(Statement stmt) throws Exception {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter Start date: ");
+        String start = sc.nextLine();
+        System.out.println("Enter End date: ");
+        String end = sc.nextLine();
+        
+        ResultSet rs = stmt.executeQuery("SELECT 100*COUNT(*)/(SELECT COUNT(*) FROM rooms) AS D_OCC FROM reservations WHERE (‘" + start + "’ BETWEEN start_date AND end_date) AND (‘" + end + "’ BETWEEN start_date AND end_date)");
+        rs.next();
+        System.out.println("Room occupancy: " + rs.getDouble("H_OCC") + "%\n");
+    }
+
+    static void occCity(Statement stmt) throws Exception {
+        ResultSet rs = stmt.executeQuery("SELECT address AS city, 100 – (100*SUM(is_available)/COUNT(is_available)) AS C_OCC FROM rooms, hotels WHERE hotel_id = id GROUP BY address");
+        
+        while(rs.next()) {
+            String city = rs.getString("city");
+            double occ = rs.getDouble("C_OCC");
+            System.out.println("Occupancy in " + city + ": " + occ + "%\n");
+        }
+    }
+
+    static void occTotal(Statement stmt) throws Exception {
+        ResultSet rs = stmt.executeQuery("SELECT COUNT(*) AS TOTAL_OCC, 100*COUNT(*)/(SELECT COUNT(*) FROM rooms) AS PERC FROM reservation_for");
+        while(rs.next()) {
+            int cnt = rs.getInt("TOTAL_OCC");
+            double occ = rs.getDouble("PERC");
+            System.out.println("No of rooms occupied: " + cnt);
+            System.out.println("\n% of rooms occupied: " + occ + "%\n");
+        }
+    }
+
+    static void revenue(Statement stmt) throws Exception {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter Hotel ID: ");
+        int id = sc.nextInt();
+        System.out.println("Enter Start date: ");
+        String start = sc.nextLine();
+        System.out.println("Enter End date: ");
+        String end = sc.nextLine();
+        
+        ResultSet rs = stmt.executeQuery("SELECT SUM(total_amount) AS Revenue FROM reservations r INNER JOIN reservation_for rf ON r.id = rf.reservation_id WHERE end_date BETWEEN ‘" + start + "’ AND ‘" + end + "’ AND hotel_id =" + id +")");
+        rs.next();
+        int total = rs.getInt("Revenue");
+        System.out.println("Total Revenue: $" + total);
+    }
+
+    static void staffInfoByRole(Statement stmt) throws Exception {
+        ResultSet rs = stmt.executeQuery("SELECT title, department, COUNT(*) AS cnt FROM staff GROUP BY title, department;");
+        while(rs.next()) {
+            String title = rs.getString("title");
+            String dept = rs.getString("department");
+            int cnt = rs.getInt("cnt");
+            System.out.println(title + " (" + dept + ") count: " + cnt + "\n");
+        }
+    }
+
+    static void staffInfoByCust(Statement stmt) throws Exception {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter Customer ID: ");
+        int id = sc.nextInt();
+        
+        ResultSet rs = stmt.executeQuery("SELECT id, name, title, department, address, phone, availability, age FROM staff INNER JOIN staff_provides s ON id = staff_id INNER JOIN customer_makes c ON s.reservation_id = c.reservation_id WHERE customer_id =" + id + ")");
+        while(rs.next()) {
+            int id = rs.getInt("id");
+            String name = rs.getString("name");
+            String title = rs.getString("title");
+            String dept = rs.getString("department");
+            String address = rs.getString("address");
+            int phone = rs.getInt("phone");
+            int availability = rs.getInt("availability");
+            int age = rs.getInt("age");
+            System.out.println("STAFF ID #" + id);
+            System.out.println("\n\tName: " + name);
+            System.out.println("\n\tAge: " + age);
+            System.out.println("\n\tTitle: " + title);
+            System.out.println("\n\tDepartment: " + dept);
+            System.out.println("\n\tAddress: " + address);
+            System.out.println("\n\tPhone: " + phone);
+            System.out.println("\n\tAvailability: " + availability);
+        }
+    }
+
     static void dropTables(Statement stmt) throws Exception{
         stmt.executeUpdate("DROP TABLE customer_makes");
         stmt.executeUpdate("DROP TABLE reservation_for");
