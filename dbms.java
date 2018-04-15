@@ -348,7 +348,7 @@ public class Dbms {
         stmt.executeUpdate("UPDATE hotels SET name = \"" + name + "\", address = \"" + address + "\", phone = " + phone + ",manager_id = " + mid + " WHERE id =" + id);
     }
     
-    static void addRoom(Statement stmt) throws Exception {
+        static void addRoom(Statement stmt) throws Exception {
         String name, category;
         int no, hid, occ, availability;
         double price;
@@ -372,19 +372,22 @@ public class Dbms {
         sc.nextLine();
         System.out.println("Enter availability (0/1): ");
         availability = sc.nextInt();
-        sc.nextLine();
 
+        stmt.executeUpdate("INSERT INTO rooms (no, hotel_id, price, is_available, max_occupancy, category) VALUES ("+ no + "," + hid + "," +
+        price + "," + availability + "," + occ + ",\"" + category + "\")"); 
     }
     
     static void deleteRoom(Statement stmt) throws Exception {
-        int id;
+        int no,hid;
         Scanner sc = new Scanner(System.in);
         
         System.out.println("Delete a Room\n\n");
-        System.out.println("Enter ID: ");
-        id = sc.nextInt();
-        
-        //        stmt.executeUpdate("INSERT INTO hotels)
+        System.out.println("Enter hotel ID: ");
+        hid = sc.nextInt();
+        sc.nextLine();
+        System.out.println("Enter Room no: ");
+        no = sc.nextInt();
+        stmt.executeUpdate("DELETE from rooms WHERE no = "+ no +" and hotel_id="+hid);
     }
     
     static void updateRoom(Statement stmt) throws Exception {
@@ -397,18 +400,22 @@ public class Dbms {
         System.out.println("Update a Room\n\n");
         System.out.println("Enter hotel ID: ");
         hid = sc.nextInt();
+        sc.nextLine();
         System.out.println("Enter room number: ");
         no = sc.nextInt();
-        System.out.println("Enter new category: ");
+        sc.nextLine();
+        System.out.println("Enter category: ");
         category = sc.nextLine();
-        System.out.println("Enter new max occupancy: ");
+        System.out.println("Enter max occupancy: ");
         occ = sc.nextInt();
-        System.out.println("Enter new price: ");
+        sc.nextLine();
+        System.out.println("Enter price: ");
         price = sc.nextDouble();
-        System.out.println("Enter new availability (0/1): ");
+        sc.nextLine();
+        System.out.println("Enter availability (0/1): ");
         availability = sc.nextInt();
-        
-        //        stmt.executeUpdate("INSERT INTO hotels)
+        stmt.executeUpdate("UPDATE rooms set no =" + no +  "," + "price =  "+ price + "," + "is_available=" 
+            + availability + "," + "max_occupancy=" + occ + "," + "category=\"" + category + "\" Where no =" + no +" and hotel_id="+hid);
     }
     
     static void addStaff(Statement stmt) throws Exception {
