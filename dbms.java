@@ -22,20 +22,11 @@ public class Dbms {
                 conn = DriverManager.getConnection(jdbcURL, user, passwd);
                 stmt = conn.createStatement();
                 
-                // stmt.executeUpdate("DROP TABLE COFFEES ");
-                
                 dropTables(stmt);
                 createTables(stmt);
                 populateDemoData(stmt);
                 login();
                 showOperations(stmt);
-                //                rs = stmt.executeQuery("SELECT COF_NAME, PRICE FROM COFFEES");
-                //
-                //                while (rs.next()) {
-                //                    String s = rs.getString("COF_NAME");
-                //                    float n = rs.getFloat("PRICE");
-                //                    System.out.println(s + "  " + n);
-                //                }
                 
             } finally {
                 close(rs);
@@ -484,9 +475,8 @@ public class Dbms {
         availability = sc.nextInt();
         stmt.executeUpdate("INSERT INTO staff (name, age, title, department, phone, address, availability) VALUES (\"" + name + "\"," + age + ",\"" + title + "\",\"" + department + "\"," +         phone + ",\"" + address + "\"," + availability + ")", Statement.RETURN_GENERATED_KEYS);
         ResultSet rs = stmt.getGeneratedKeys();
-        if (rs.next()){
-            staff_id = rs.getInt(1);
-        }
+        rs.next();
+        staff_id = rs.getInt(1);
         stmt.executeUpdate("INSERT INTO staff_works_at (hotel_id, staff_id) VALUES (" + hid + "," + staff_id + ")");
     }
     
@@ -600,9 +590,8 @@ public class Dbms {
         
         stmt.executeUpdate("INSERT INTO services (reservation_id, name, price) VALUES (" + reservation_id + ",\"" + name + "\"," + price + ")", Statement.RETURN_GENERATED_KEYS);
         ResultSet rs = stmt.getGeneratedKeys();
-        if (rs.next()){
-            service_id = rs.getInt(1);
-        }
+        rs.next();
+        service_id = rs.getInt(1);
         stmt.executeUpdate("INSERT INTO staff_provides (reservation_id, staff_id, service_id) VALUES (" + reservation_id + "," + staff_id + "," + service_id + ")");
     }
     
@@ -681,9 +670,8 @@ public class Dbms {
                 stmt.executeUpdate("INSERT INTO reservations (no_of_guests, start_date,  end_date, check_in_time, check_out_time, total_amount, payment_method, card_no, expiry, billing_address, has_paid) VALUES (" + no_of_guests + ",\"" + start_date + "\",\"" +  end_date + "\",\"" + check_in_time + "\",\"" + check_out_time + "\",0,\"" + payment_method + "\""+",NULL, NULL, NULL, 0)", Statement.RETURN_GENERATED_KEYS);
             }
             rs = stmt.getGeneratedKeys();
-            if (rs.next()){
-                reservation_id = rs.getInt(1);
-            }
+            rs.next();
+            reservation_id = rs.getInt(1);
             stmt.executeUpdate("INSERT INTO customer_makes(reservation_id, customer_id) VALUES (" + reservation_id + "," + cid + ")");
             stmt.executeUpdate("INSERT INTO reservation_for(reservation_id, hotel_id, room_no) VALUES(" + reservation_id + "," + hid + "," + no + ")");
             stmt.executeUpdate("UPDATE rooms SET is_available = 0 WHERE hotel_id = " + hid + "AND no =" + no + ")");
@@ -733,7 +721,7 @@ public class Dbms {
     }
     
     static void occHotel(Statement stmt) throws Exception {
-        ResultSet rs = stmt.executeQuery("SELECT hotel_id, 100 – (100*SUM(is_available)/COUNT(is_available)) AS H_OCC FROM rooms GROUP BY hotel_id");
+        ResultSet rs = stmt.executeQuery("SELECT hotel_id, 100 - (100*SUM(is_available)/COUNT(is_available)) AS H_OCC FROM rooms GROUP BY hotel_id");
         
         while(rs.next()) {
             int id = rs.getInt("hotel_id");
@@ -743,7 +731,7 @@ public class Dbms {
     }
     
     static void occRoomType(Statement stmt) throws Exception {
-        ResultSet rs = stmt.executeQuery("SELECT category, 100 – (100*SUM(is_available)/COUNT(is_available)) AS R_OCC FROM rooms GROUP BY category");
+        ResultSet rs = stmt.executeQuery("SELECT category, 100 - (100*SUM(is_available)/COUNT(is_available)) AS R_OCC FROM rooms GROUP BY category");
         
         while(rs.next()) {
             String category = rs.getString("category");
@@ -759,13 +747,13 @@ public class Dbms {
         System.out.println("Enter End date: ");
         String end = sc.nextLine();
         
-        ResultSet rs = stmt.executeQuery("SELECT 100*COUNT(*)/(SELECT COUNT(*) FROM rooms) AS D_OCC FROM reservations WHERE (‘" + start + "’ BETWEEN start_date AND end_date) AND (‘" + end + "’ BETWEEN start_date AND end_date)");
+        ResultSet rs = stmt.executeQuery("SELECT 100*COUNT(*)/(SELECT COUNT(*) FROM rooms) AS D_OCC FROM reservations WHERE ('" + start + "' BETWEEN start_date AND end_date) AND ('" + end + "' BETWEEN start_date AND end_date)");
         rs.next();
-        System.out.println("Room occupancy: " + rs.getDouble("H_OCC") + "%\n");
+        System.out.println("Room occupancy: " + rs.getDouble("D_OCC") + "%\n");
     }
     
     static void occCity(Statement stmt) throws Exception {
-        ResultSet rs = stmt.executeQuery("SELECT address AS city, 100 – (100*SUM(is_available)/COUNT(is_available)) AS C_OCC FROM rooms, hotels WHERE hotel_id = id GROUP BY address");
+        ResultSet rs = stmt.executeQuery("SELECT address AS city, 100 - (100*SUM(is_available)/COUNT(is_available)) AS C_OCC FROM rooms, hotels WHERE hotel_id = id GROUP BY address");
         
         while(rs.next()) {
             String city = rs.getString("city");
@@ -794,7 +782,7 @@ public class Dbms {
         System.out.println("Enter End date: ");
         String end = sc.nextLine();
         
-        ResultSet rs = stmt.executeQuery("SELECT SUM(total_amount) AS Revenue FROM reservations r INNER JOIN reservation_for rf ON r.id = rf.reservation_id WHERE end_date BETWEEN ‘" + start + "’ AND ‘" + end + "’ AND hotel_id =" + id +")");
+        ResultSet rs = stmt.executeQuery("SELECT SUM(total_amount) AS Revenue FROM reservations r INNER JOIN reservation_for rf ON r.id = rf.reservation_id WHERE end_date BETWEEN '" + start + "' AND '" + end + "' AND hotel_id =" + id +")");
         rs.next();
         int total = rs.getInt("Revenue");
         System.out.println("Total Revenue: $" + total);
@@ -851,7 +839,7 @@ public class Dbms {
     
     static void createTables(Statement stmt) throws Exception{
         // Create the CUSTOMERS table
-        stmt.executeUpdate("CREATE TABLE customers (" +
+        stmt.executeUpdate("CREATE TABLE IF NOT EXISTS customers (" +
                            "id INT PRIMARY KEY NOT NULL AUTO_INCREMENT, " +
                            "name VARCHAR(128) NOT NULL, " +
                            "dob DATE NOT NULL, " +
@@ -860,7 +848,7 @@ public class Dbms {
                            "ssn INT NOT NULL UNIQUE)");
         
         // Create the STAFF table
-        stmt.executeUpdate("CREATE TABLE staff ( " +
+        stmt.executeUpdate("CREATE TABLE IF NOT EXISTS staff ( " +
                            "id INT  PRIMARY KEY AUTO_INCREMENT, " +
                            "name VARCHAR(128) NOT NULL, " +
                            "age INT, " +
@@ -871,7 +859,7 @@ public class Dbms {
                            "availability TINYINT(1) NOT NULL)");
         
         // Create the HOTELS table
-        stmt.executeUpdate("CREATE TABLE hotels (" +
+        stmt.executeUpdate("CREATE TABLE IF NOT EXISTS hotels (" +
                            "id INT PRIMARY KEY AUTO_INCREMENT, " +
                            "name VARCHAR(128) NOT NULL, " +
                            "address VARCHAR(128) NOT NULL, " +
@@ -882,7 +870,7 @@ public class Dbms {
                            "ON DELETE CASCADE ON UPDATE CASCADE)");
         
         // Create the ROOMS table
-        stmt.executeUpdate("CREATE TABLE rooms (" +
+        stmt.executeUpdate("CREATE TABLE IF NOT EXISTS rooms (" +
                            "no INT NOT NULL, " +
                            "hotel_id INT NOT NULL, " +
                            "category VARCHAR(128) NOT NULL, " +
@@ -895,7 +883,7 @@ public class Dbms {
                            "PRIMARY KEY(no, hotel_id))");
         
         // Create the RESERVATIONS table
-        stmt.executeUpdate("CREATE TABLE reservations ( " +
+        stmt.executeUpdate("CREATE TABLE IF NOT EXISTS reservations ( " +
                            "id INT PRIMARY KEY AUTO_INCREMENT, " +
                            "no_of_guests INT, " +
                            "start_date DATE NOT NULL, " +
@@ -910,7 +898,7 @@ public class Dbms {
                            "has_paid TINYINT(1) NOT NULL)");
         
         // Create the SERVICES table
-        stmt.executeUpdate("CREATE TABLE services ( " +
+        stmt.executeUpdate("CREATE TABLE IF NOT EXISTS services ( " +
                            "id INT AUTO_INCREMENT NOT NULL, " +
                            "reservation_id INT NOT NULL, " +
                            "name VARCHAR(128) NOT NULL, " +
@@ -921,7 +909,7 @@ public class Dbms {
                            "PRIMARY KEY(id, reservation_id))");
         
         // Create the STAFF_WORKS_AT table
-        stmt.executeUpdate("CREATE TABLE staff_works_at ( " +
+        stmt.executeUpdate("CREATE TABLE IF NOT EXISTS staff_works_at ( " +
                            "hotel_id INT NOT NULL, " +
                            "staff_id INT NOT NULL, " +
                            "CONSTRAINT staff_works_at_pk PRIMARY KEY(hotel_id, staff_id), " +
@@ -933,7 +921,7 @@ public class Dbms {
                            "ON DELETE CASCADE ON UPDATE CASCADE)");
         
         // Create the CUSTOMER_MAKES table
-        stmt.executeUpdate("CREATE TABLE customer_makes ( " +
+        stmt.executeUpdate("CREATE TABLE IF NOT EXISTS customer_makes ( " +
                            "reservation_id INT NOT NULL," +
                            "customer_id INT NOT NULL," +
                            "CONSTRAINT customer_makes_pk PRIMARY KEY(customer_id, reservation_id)," +
@@ -945,7 +933,7 @@ public class Dbms {
                            "ON DELETE CASCADE ON UPDATE CASCADE)");
         
         // Create the RESERVATION_FOR table
-        stmt.executeUpdate("CREATE TABLE reservation_for ( " +
+        stmt.executeUpdate("CREATE TABLE IF NOT EXISTS reservation_for ( " +
                            "reservation_id INT NOT NULL, " +
                            "room_no INT NOT NULL, " +
                            "hotel_id INT NOT NULL, " +
@@ -959,7 +947,7 @@ public class Dbms {
                            "ON DELETE CASCADE ON UPDATE CASCADE)");
         
         // Create the STAFF_PROVIDES table
-        stmt.executeUpdate("CREATE TABLE staff_provides ( " +
+        stmt.executeUpdate("CREATE TABLE IF NOT EXISTS staff_provides ( " +
                            "reservation_id INT NOT NULL, " +
                            "staff_id INT NOT NULL, " +
                            "service_id INT NOT NULL, " +
