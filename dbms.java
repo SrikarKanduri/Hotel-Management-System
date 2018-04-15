@@ -700,6 +700,7 @@ public class Dbms {
               if(!payment_method.equals("cash")) {
                 System.out.println("Enter card no: ");
                 card_no = sc.nextLong();
+                sc.nextLine();
                 System.out.println("Enter expiry: ");
                 expiry = sc.nextLine();
                 System.out.println("Enter billing address: ");
