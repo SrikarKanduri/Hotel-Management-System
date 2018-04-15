@@ -426,7 +426,6 @@ public class Dbms {
         title = sc.nextLine();
         System.out.println("Enter department: ");
         department = sc.nextLine();
-        sc.nextLine();
         System.out.println("Enter phone: ");
         phone = sc.nextInt();
         sc.nextLine();
