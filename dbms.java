@@ -156,7 +156,7 @@ public class Dbms {
         System.out.println("1) Manage customers\n");
         System.out.println("2) Manage room assignment\n");
         System.out.println("3) Manage staff\n");
-        System.out.println("4) Add service\n");
+        System.out.println("4) Manage services\n");
         System.out.println("5) Check-out\n");
         System.out.println("Any other number to logout\n");
         
