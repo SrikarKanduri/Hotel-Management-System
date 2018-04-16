@@ -764,11 +764,12 @@ public class Dbms {
     }
     
     static void updateService(Statement stmt, Connection conn) throws Exception {
-        String name;
-        int reservation_id, staff_id, service_id;
-        double price;
+        String name="",temp,query;
+        int reservation_id, staff_id=0, service_id,old_staff_id=0;
+        double price=0.0;
         Scanner sc = new Scanner(System.in);
-        
+        Boolean flag= false;
+        ResultSet rs = null;
         System.out.println("Update Service\n\n");
         System.out.println("Enter service ID: ");
         service_id = sc.nextInt();
@@ -776,18 +777,41 @@ public class Dbms {
         System.out.println("Enter reservation ID: ");
         reservation_id = sc.nextInt();
         sc.nextLine();
+        query ="UPDATE services set ";    
+        rs = stmt.executeQuery("SELECT name,price from services WHERE id = " + service_id +" and reservation_id =" + reservation_id);
+        while(rs.next()) {
+            name = rs.getString("name");
+            price = rs.getDouble("price");
+        }
         System.out.println("Enter name: ");
-        name = sc.nextLine();
+        temp = sc.nextLine();
+        if(temp.length()!=0){
+            name = temp;
+        }
+        query = query+" name = \""+name+"\",";
         System.out.println("Enter price: ");
-        price = sc.nextDouble();
-        sc.nextLine();
+        temp = sc.nextLine();
+        if(temp.length()!=0){
+            price = Double.valueOf(temp);            
+        }
+        query = query+" price = "+ price;
         System.out.println("Enter staff ID: ");
-        staff_id = sc.nextInt();
-        sc.nextLine();
+        temp = sc.nextLine();
+        if(temp.length()!=0){
+            flag=true;
+            staff_id = Integer.valueOf(temp);
+            rs = stmt.executeQuery("SELECT staff_id from staff_provides WHERE service_id = " + service_id +" and reservation_id =" + reservation_id);
+            while(rs.next()) {
+                old_staff_id = rs.getInt("staff_id"); 
+            }        
+        }
+        query = query+ " WHERE id = " + service_id +" and reservation_id =" + reservation_id;
         conn.setAutoCommit(false);
         try {
-          stmt.executeUpdate("UPDATE services SET name =\"" + name + "\", reservation_id =" + reservation_id + ",price = " + price + "WHERE service_id = " + service_id + ")");
-          stmt.executeUpdate("UPDATE staff_provides SET reservation_id =" + reservation_id + ",staff_id = " + staff_id + "WHERE service_id = " + service_id + ")");
+          stmt.executeUpdate(query);
+          if(flag){
+            stmt.executeUpdate("UPDATE staff_provides SET staff_id = " + staff_id + " WHERE service_id = " + service_id + " and reservation_id =" + reservation_id+" and staff_id = " + old_staff_id );
+          }          
           conn.commit();
         }
         catch(Exception e) {
