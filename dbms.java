@@ -1084,7 +1084,7 @@ public class Dbms {
         stmt.executeUpdate("CREATE TABLE IF NOT EXISTS staff ( " +
                            "id INT  PRIMARY KEY AUTO_INCREMENT, " +
                            "name VARCHAR(128) NOT NULL, " +
-                           "age INT, " +
+                           "age INT NOT NULL, " +
                            "title VARCHAR(128) NOT NULL, " +
                            "department VARCHAR(128) NOT NULL, " +
                            "phone INT NOT NULL, " +
@@ -1108,7 +1108,7 @@ public class Dbms {
                            "hotel_id INT NOT NULL, " +
                            "category VARCHAR(128) NOT NULL, " +
                            "max_occupancy INT NOT NULL, " +
-                           "price INT NOT NULL, " +
+                           "price DECIMAL(10,2) NOT NULL, " +
                            "is_available TINYINT(1) NOT NULL, " +
                            "CONSTRAINT hotel_room_fk  " +
                            "FOREIGN KEY(hotel_id) REFERENCES hotels(id)  " +
