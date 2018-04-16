@@ -1015,17 +1015,17 @@ public class Dbms {
                                "CASE WHEN payment_method = \"hotel credit\" THEN (total_amount * 0.95) ELSE (total_amount) END WHERE has_paid = 0");
             //Itemized receipt
             System.out.println("\n-----------RECEIPT-----------\n");
-            System.out.println("Room price: " + room_price);
+            System.out.println("Room price (for the whole stay): $" + room_price);
             rs = stmt.executeQuery("SELECT name, price FROM services WHERE reservation_id = " + reservation_id);
             while(rs.next()) {
                 String name = rs.getString("name");
                 double price = rs.getDouble("price");
-                System.out.println("\n" + name + ": "+ price);
+                System.out.println("\n" + name + ": $"+ price);
             }
             //Total amount
             rs = stmt.executeQuery("SELECT total_amount FROM reservations WHERE id = " + reservation_id);
             rs.next();
-            System.out.println("Total: " + rs.getDouble("total_amount"));
+            System.out.println("\nTOTAL AMOUNT: $" + rs.getDouble("total_amount"));
             stmt.executeUpdate("UPDATE rooms SET is_available = 1 WHERE hotel_id = " + hotel_id + " AND no = " + no);
             stmt.executeUpdate("UPDATE reservations SET has_paid = 1 WHERE has_paid = 0 AND id = " + reservation_id);
             System.out.println("\nCheck-out success!\n");
