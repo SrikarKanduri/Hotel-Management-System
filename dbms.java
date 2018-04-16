@@ -457,31 +457,55 @@ public class Dbms {
     }
     
     static void updateRoom(Statement stmt) throws Exception {
-        String name, category;
-        int no, hid, occ, availability;
-        double price;
-        
+        String name, category="",temp,query;
+        int no, hid, occ=0, availability=0;
+        double price=0.0;
+        ResultSet rs = null;
+        query ="UPDATE rooms set ";
         Scanner sc = new Scanner(System.in);
         
         System.out.println("Update a Room\n\n");
         System.out.println("Enter hotel ID: ");
-        hid = sc.nextInt();
+        hid = sc.nextInt();  
         sc.nextLine();
         System.out.println("Enter room number: ");
         no = sc.nextInt();
         sc.nextLine();
+
+        rs = stmt.executeQuery("SELECT category,price,is_available,max_occupancy from rooms where no="+no+" and hotel_id="+hid);
+
+        while(rs.next()) {
+            category = rs.getString("category");
+            price = rs.getDouble("price");
+            availability = rs.getInt("is_available"); 
+            occ = rs.getInt("max_occupancy"); 
+        }
         System.out.println("Enter category: ");
-        category = sc.nextLine();
+        temp = sc.nextLine();
+        if(temp.length()!=0){
+            category = temp;
+        }
+        query = query+" category = \""+category+"\",";
         System.out.println("Enter max occupancy: ");
-        occ = sc.nextInt();
-        sc.nextLine();
+        temp = sc.nextLine();
+        if(temp.length()!=0){
+            occ = Integer.valueOf(temp);            
+        }
+        query = query+" max_occupancy = "+occ+",";
         System.out.println("Enter price: ");
-        price = sc.nextDouble();
-        sc.nextLine();
+        temp = sc.nextLine();
+        if(temp.length()!=0){
+            price = Double.valueOf(temp);            
+        }
+        query = query+" price = "+price+",";
         System.out.println("Enter availability (0/1): ");
-        availability = sc.nextInt();
-        stmt.executeUpdate("UPDATE rooms set no =" + no +  "," + "price =  "+ price + "," + "is_available="
-                           + availability + "," + "max_occupancy=" + occ + "," + "category=\"" + category + "\" Where no =" + no +" and hotel_id="+hid);
+        temp = sc.nextLine();
+        if(temp.length()!=0){
+            availability = Integer.valueOf(temp);            
+        }
+        query = query+" is_available = "+availability;
+        query = query+" Where no =" + no +" and hotel_id="+hid;
+        stmt.executeUpdate(query);    
     }
     
     static void addStaff(Statement stmt) throws Exception {
