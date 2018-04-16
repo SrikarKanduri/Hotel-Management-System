@@ -1374,13 +1374,13 @@ public class Dbms {
         // no_of_guests start_date  end_date check_in_time check_out_time total_amount payment_method card_no expiry billing_address has_paid
         
         stmt.executeUpdate("INSERT INTO reservations (no_of_guests, start_date,  end_date, check_in_time, check_out_time, total_amount, payment_method, card_no, expiry, billing_address, has_paid)" +
-                           "VALUES (1, '2017-05-10', '2017-05-13', '3:17:00', '10:22:00', 0, 'credit', 1052, NULL, '980 TRT St , Raleigh NC', 0)");
+                           "VALUES (1, '2017-05-10', '2017-05-13', '3:17:00', '10:22:00', 331.0, 'credit', 1052, NULL, '980 TRT St , Raleigh NC', 1)");
         
         stmt.executeUpdate("INSERT INTO reservations (no_of_guests, start_date,  end_date, check_in_time, check_out_time, total_amount, payment_method, card_no, expiry, billing_address, has_paid)" +
-                           "VALUES (2, '2017-05-10', '2017-05-13', '4:11:00', '9:27:00', 0, 'credit', 3020, NULL, '7720 MHT St , Greensboro NC', 0)");
+                           "VALUES (2, '2017-05-10', '2017-05-13', '4:11:00', '9:27:00', 615.0, 'credit', 3020, NULL, '7720 MHT St , Greensboro NC', 1)");
         
         stmt.executeUpdate("INSERT INTO reservations (no_of_guests, start_date,  end_date, check_in_time, check_out_time, total_amount, payment_method, card_no, expiry, billing_address, has_paid)" +
-                           "VALUES (1, '2016-05-10', '2016-05-14', '3:45:00', '11:10:00', 0, 'credit', 2497, NULL, '231 DRY St , Rochester NY 78', 0)");
+                           "VALUES (1, '2016-05-10', '2016-05-14', '3:45:00', '11:10:00', 410.0, 'credit', 2497, NULL, '231 DRY St , Rochester NY 78', 1)");
         
         stmt.executeUpdate("INSERT INTO reservations (no_of_guests, start_date,  end_date, check_in_time, check_out_time, total_amount, payment_method, card_no, expiry, billing_address, has_paid)" +
                            "VALUES (2, '2018-05-10', '2018-05-12', '2:30:00', '10:00:00', 0, 'cash', NULL, NULL, '24 BST Dr , Dallas TX 14', 0)");
