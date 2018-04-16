@@ -393,25 +393,56 @@ public class Dbms {
     }
     
     static void updateHotel(Statement stmt) throws Exception {
-        String name, address;
-        int phone, id, mid;
+        String name="", address="",temp,query;
+        int phone=0, id, mid=0;
         Scanner sc = new Scanner(System.in);
-        
+        ResultSet rs = null;
+        query ="UPDATE hotels set ";
+
         System.out.println("Update a Hotel\n\n");
         System.out.println("Enter hotel ID: ");
         id = sc.nextInt();
         sc.nextLine();
+        rs = stmt.executeQuery("SELECT name,address,phone,manager_id from hotels where id = " + id);
+
+        while(rs.next()) {
+            name = rs.getString("name");
+            address = rs.getString("address");
+            phone = rs.getInt("phone");
+            mid = rs.getInt("manager_id");
+        }
+
+
         System.out.println("Enter new name: ");
-        name = sc.nextLine();
+        temp = sc.nextLine();
+        if(temp.length()!=0){
+            name = temp;
+        }
+        query = query+" name = \""+name+"\",";
+
         System.out.println("Enter new address: ");
-        address = sc.nextLine();
+        temp = sc.nextLine();
+        if(temp.length()!=0){
+            address = temp;
+        }
+        query = query+" address = \""+address+"\",";
+
         System.out.println("Enter new phone: ");
-        phone = sc.nextInt();
-        sc.nextLine();
+        temp = sc.nextLine();
+        if(temp.length()!=0){
+            phone = Integer.valueOf(temp);            
+        }
+        query = query+" phone = "+phone+",";
+
         System.out.println("Enter new manager ID: ");
-        mid = sc.nextInt();
-        
-        stmt.executeUpdate("UPDATE hotels SET name = \"" + name + "\", address = \"" + address + "\", phone = " + phone + ",manager_id = " + mid + " WHERE id =" + id);
+        temp = sc.nextLine();
+        if(temp.length()!=0){
+            mid = Integer.valueOf(temp);            
+        }
+        query = query+" manager_id = "+mid;
+        query = query+" Where id =" + id;
+        stmt.executeUpdate(query);
+
     }
     
     static void addRoom(Statement stmt) throws Exception {
@@ -486,24 +517,27 @@ public class Dbms {
             category = temp;
         }
         query = query+" category = \""+category+"\",";
+
         System.out.println("Enter max occupancy: ");
         temp = sc.nextLine();
         if(temp.length()!=0){
             occ = Integer.valueOf(temp);            
         }
         query = query+" max_occupancy = "+occ+",";
+
         System.out.println("Enter price: ");
         temp = sc.nextLine();
         if(temp.length()!=0){
             price = Double.valueOf(temp);            
         }
-        query = query+" price = "+price+",";
+        query = query+" price = "+ price + ",";
+
         System.out.println("Enter availability (0/1): ");
         temp = sc.nextLine();
         if(temp.length()!=0){
             availability = Integer.valueOf(temp);            
         }
-        query = query+" is_available = "+availability;
+        query = query+" is_available = " + availability;
         query = query+" Where no =" + no +" and hotel_id="+hid;
         stmt.executeUpdate(query);    
     }
@@ -608,26 +642,62 @@ public class Dbms {
     }
     
     static void updateCustomer(Statement stmt) throws Exception {
-        String name, dob, email;
-        int id, phone, ssn;
+        String name="", dob="0000-00-00", email="",temp,query;
+        int id, phone=0, ssn=0;
         Scanner sc = new Scanner(System.in);
-        
+        ResultSet rs = null;
+        query ="UPDATE customers set ";
+
         System.out.println("Update Customer\n\n");
         System.out.println("Enter customer ID: ");
         id = sc.nextInt();
         sc.nextLine();
+
+        rs = stmt.executeQuery("SELECT name,dob,phone,email,ssn from customers where id = "+ id);
+        while(rs.next()) {
+            name = rs.getString("name");
+            dob = rs.getString("dob");
+            phone = rs.getInt("phone");
+            email = rs.getString("email");
+            ssn = rs.getInt("ssn");
+        }
+
         System.out.println("Enter name: ");
-        name = sc.nextLine();
+        temp = sc.nextLine();
+        if(temp.length()!=0){
+            name = temp;
+        }
+        query = query+" name = \""+name+"\",";
+
         System.out.println("Enter dob: ");
-        dob = sc.nextLine();
+        temp = sc.nextLine();
+        if(temp.length()!=0){
+            dob = temp;
+        }
+        query = query+" dob = \""+dob+"\",";
+
         System.out.println("Enter phone: ");
-        phone = sc.nextInt();
-        sc.nextLine();
+        temp = sc.nextLine();
+        if(temp.length()!=0){
+            phone = Integer.valueOf(temp);
+        }
+        query = query+" phone = "+ phone +",";
+
         System.out.println("Enter email: ");
-        email = sc.nextLine();
+        temp = sc.nextLine();
+        if(temp.length()!=0){
+            email = temp;
+        }
+        query = query+" email = \""+email+"\",";
+
         System.out.println("Enter ssn: ");
-        ssn = sc.nextInt();
-        stmt.executeUpdate("UPDATE customers set name =\"" + name + "\"," + "dob = \"" + dob + "\"," + "phone=" + phone + "," + "email=\"" + email + "\"," + "ssn=" + ssn + " Where id =" + id);
+        temp = sc.nextLine();
+        if(temp.length()!=0){
+            ssn = Integer.valueOf(temp);
+        }
+        query = query+" ssn = " + ssn;
+        query = query+" WHERE id = " + id ;
+        stmt.executeUpdate(query);
     }
     
     static void addService(Statement stmt) throws Exception {
@@ -682,7 +752,7 @@ public class Dbms {
           stmt.executeUpdate("UPDATE staff_provides SET reservation_id =" + reservation_id + ",staff_id = " + staff_id + "WHERE service_id = " + service_id + ")");
           conn.commit();
         }
-        catch(Excception e) {
+        catch(Exception e) {
           conn.rollback();
         }
         finally {
