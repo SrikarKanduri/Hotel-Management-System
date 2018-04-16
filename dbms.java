@@ -174,7 +174,7 @@ public class Dbms {
                 manageStaff(stmt);
                 break;
             case 4:
-                manageServices(stmt);
+                manageServices(stmt, conn);
                 break;
             case 5:
                 generateBill(stmt, conn);
@@ -293,7 +293,7 @@ public class Dbms {
         }
     }
     
-    static void manageServices(Statement stmt) throws Exception {
+    static void manageServices(Statement stmt, Connection conn) throws Exception {
         Scanner sc = new Scanner(System.in);
         
         //        Runtime.getRuntime().exec("clear");
@@ -309,7 +309,7 @@ public class Dbms {
                 addService(stmt);
                 break;
             case 2:
-                updateService(stmt);
+                updateService(stmt, conn);
                 break;
             default:
                 System.out.println("Invalid option. Re-enter!\n");
@@ -631,7 +631,7 @@ public class Dbms {
         stmt.executeUpdate("INSERT INTO staff_provides (reservation_id, staff_id, service_id) VALUES (" + reservation_id + "," + staff_id + "," + service_id + ")");
     }
     
-    static void updateService(Statement stmt) throws Exception {
+    static void updateService(Statement stmt, Connection conn) throws Exception {
         String name;
         int reservation_id, staff_id, service_id;
         double price;
@@ -652,9 +652,18 @@ public class Dbms {
         System.out.println("Enter staff ID: ");
         staff_id = sc.nextInt();
         sc.nextLine();
-        
-        stmt.executeUpdate("UPDATE services SET name =\"" + name + "\", reservation_id =" + reservation_id + ",price = " + price + "WHERE service_id = " + service_id + ")");
-        stmt.executeUpdate("UPDATE staff_provides SET reservation_id =" + reservation_id + ",staff_id = " + staff_id + "WHERE service_id = " + service_id + ")");
+        conn.setAutoCommit(false);
+        try {
+          stmt.executeUpdate("UPDATE services SET name =\"" + name + "\", reservation_id =" + reservation_id + ",price = " + price + "WHERE service_id = " + service_id + ")");
+          stmt.executeUpdate("UPDATE staff_provides SET reservation_id =" + reservation_id + ",staff_id = " + staff_id + "WHERE service_id = " + service_id + ")");
+          conn.commit();
+        }
+        catch(Excception e) {
+          conn.rollback();
+        }
+        finally {
+          conn.setAutoCommit(true);
+        }
     }
     
     static void assignRoom(Statement stmt, Connection conn) throws Exception {
