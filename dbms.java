@@ -585,30 +585,68 @@ public class Dbms {
     }
     
     static void updateStaff(Statement stmt) throws Exception {
-        String name, title, dept, address;
-        int id, age, phone, availability;
+        String name="", title="", dept="", address="",query,temp;
+        int id, age=0, phone=0, availability=0;
         Scanner sc = new Scanner(System.in);
+        ResultSet rs = null;
         System.out.println("Update Staff\n\n");
         System.out.println("Enter staff ID: ");
         id = sc.nextInt();
         sc.nextLine();
+        rs = stmt.executeQuery("SELECT name,age,title,department,phone,address,availability from staff where id="+id);
+        while(rs.next()) {
+            name = rs.getString("name");
+            age = rs.getInt("age");
+            availability = rs.getInt("availability"); 
+            title = rs.getString("title"); 
+            dept = rs.getString("department"); 
+            phone = rs.getInt("phone"); 
+            address = rs.getString("address"); 
+        }
+        query ="UPDATE staff set ";
         System.out.println("Enter new name: ");
-        name = sc.nextLine();
+        temp = sc.nextLine();
+        if(temp.length()!=0){
+            name = temp;
+        }
+        query = query+" name = \""+name+"\",";
         System.out.println("Enter new age: ");
-        age = sc.nextInt();
-        sc.nextLine();
+        temp = sc.nextLine();
+        if(temp.length()!=0){
+            age = Integer.valueOf(temp); 
+        }
+        query = query+" age = "+age+",";
         System.out.println("Enter new title: ");
-        title = sc.nextLine();
+        temp = sc.nextLine();
+        if(temp.length()!=0){
+            title = temp;
+        }
+        query = query+" title = \""+title+"\",";
         System.out.println("Enter new department: ");
-        dept = sc.nextLine();
+        temp = sc.nextLine();
+        if(temp.length()!=0){
+            dept = temp;
+        }
+        query = query+" department = \""+dept+"\",";
         System.out.println("Enter new phone: ");
-        phone = sc.nextInt();
-        sc.nextLine();
+        temp = sc.nextLine();
+        if(temp.length()!=0){
+            phone = Integer.valueOf(temp); 
+        }
+        query = query+" phone = "+phone+",";
         System.out.println("Enter new address: ");
-        address = sc.nextLine();
+        temp = sc.nextLine();
+        if(temp.length()!=0){
+            address = temp;
+        }
+        query = query+" address = \""+address+"\",";
         System.out.println("Enter new availability (0/1): ");
-        availability = sc.nextInt();
-        stmt.executeUpdate("UPDATE staff set name =\"" + name + "\", age=" + age + "," + "title = \"" + title + "\"," + "department=\"" + dept + "\"," + "phone=" + phone + "," + "address=\"" + address + "\", availability=" + availability + " Where id =" + id);
+        temp = sc.nextLine();
+        if(temp.length()!=0){
+            availability = Integer.valueOf(temp); 
+        }
+        query = query+" availability = "+availability+" where id = "+ id;
+        stmt.executeUpdate(query);    
     }
     static void addCustomer(Statement stmt) throws Exception {
         String name, dob, email;
