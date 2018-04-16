@@ -93,7 +93,7 @@ public class Dbms {
     static void ceoOperations(Statement stmt) throws Exception {
         Scanner sc = new Scanner(System.in);
         
-        System.out.println("---------------CEO View---------------\n\n");
+        System.out.println("\n\n---------------CEO View---------------\n");
         System.out.println("1) Manage hotels\n");
         System.out.println("2) Manage staff\n");
         System.out.println("3) View reports\n");
@@ -120,10 +120,12 @@ public class Dbms {
     static void mgrOperations(Statement stmt) throws Exception {
         Scanner sc = new Scanner(System.in);
         
-        System.out.println("---------------Manager View---------------\n\n");
+        System.out.println("\n---------------Manager View---------------\n\n");
         System.out.println("1) Manage rooms\n");
         System.out.println("2) Manage staff\n");
-        System.out.println("3) View reports\n");
+        System.out.println("3) View Customer list\n");
+        System.out.println("4) View Reservations list\n");
+        System.out.println("4) View reports\n");
         System.out.println("Any other number to logout\n");
         int option = sc.nextInt();
         System.out.print("\033[H\033[2J");
@@ -136,6 +138,9 @@ public class Dbms {
                 manageStaff(stmt);
                 break;
             case 3:
+                displayCustomers(stmt);
+                break;
+            case 4:
                 viewReports(stmt);
                 break;
             default:
@@ -147,7 +152,7 @@ public class Dbms {
     static void fdrOperations(Statement stmt, Connection conn) throws Exception {
         Scanner sc = new Scanner(System.in);
         
-        System.out.println("---------------Front Desk Representative View---------------\n\n");
+        System.out.println("\n---------------Front Desk Representative View---------------\n\n");
         System.out.println("1) Manage customers\n");
         System.out.println("2) Manage room assignment\n");
         System.out.println("3) Manage staff\n");
@@ -453,15 +458,17 @@ public class Dbms {
     }
     
     static void displayHotels(Statement stmt) throws Exception {
+        Scanner sc = new Scanner(System.in);
         System.out.println("Hotel List\n");
         ResultSet rs = stmt.executeQuery("SELECT * FROM hotels");
         
+        System.out.println("ID|Name|Address|Phone|Manager ID");
         while(rs.next()) {
-            System.out.println("\nDetails of Hotel #" + rs.getInt("id") + ":\n");
-            System.out.println("Name: " + rs.getString("name"));
-            System.out.println("\nAddress: " + rs.getString("address"));
-            System.out.println("\nPhone: " + rs.getInt("phone"));
-            System.out.println("\nManager ID: " + rs.getInt("manager_id"));
+            System.out.print(rs.getInt("id"));
+            System.out.print("|" + rs.getString("name"));
+            System.out.print("|" + rs.getString("address"));
+            System.out.print("|" + rs.getInt("phone"));
+            System.out.println("|" + rs.getInt("manager_id"));
         }
     }
     
@@ -563,16 +570,18 @@ public class Dbms {
     }
 
     static void displayRooms(Statement stmt) throws Exception {
+        Scanner sc = new Scanner(System.in);
         System.out.println("Room List\n");
         ResultSet rs = stmt.executeQuery("SELECT * FROM rooms");
         
+        System.out.println("No|Hotel ID|Category|Max occpancy|Price|Available (0=No, 1=Yes)");
         while(rs.next()) {
-            System.out.println("\nDetails of Room #" + rs.getInt("no") + ":\n");
-            System.out.println("Hotel ID: " + rs.getInt("hotel_id"));
-            System.out.println("\nCategory: " + rs.getString("category"));
-            System.out.println("\nMax occupancy: " + rs.getInt("max_occupancy"));
-            System.out.println("\nPrice: " + rs.getDouble("price"));
-            System.out.println("\nAvailable (0=No, 1=Yes): " + rs.getInt("is_available"));
+            System.out.print(rs.getInt("no"));
+            System.out.print("|" + rs.getInt("hotel_id"));
+            System.out.print("|" + rs.getString("category"));
+            System.out.print("|" + rs.getInt("max_occupancy"));
+            System.out.print("|" + rs.getDouble("price"));
+            System.out.println("|" + rs.getInt("is_available"));
         }
     }
     
@@ -684,20 +693,22 @@ public class Dbms {
     }
     
     static void displayStaff(Statement stmt) throws Exception {
+        Scanner sc = new Scanner(System.in);
         System.out.println("Enter Hotel ID: ");
         int hotel_id = sc.nextInt();
         System.out.println("Staff List\n");
         ResultSet rs = stmt.executeQuery("SELECT * FROM staff WHERE id IN (SELECT staff_id FROM staff_works_at WHERE hotel_id = " + hotel_id + ")");
         
+        System.out.println("ID|Name|Age|Title|Department|Phone|Address|Available (0=No, 1=Yes)");
         while(rs.next()) {
-            System.out.println("\nDetails of Staff #" + rs.getInt("id") + ":\n");
-            System.out.println("Name: " + rs.getString("name"));
-            System.out.println("\nAge: " + rs.getInt("age"));
-            System.out.println("\nTitle: " + rs.getString("title"));
-            System.out.println("\nDepartment: " + rs.getString("department"));
-            System.out.println("\nPhone: " + rs.getInt("phone"));
-            System.out.println("\nAddress: " + rs.getString("address"));
-            System.out.println("\nAvailable (0=No, 1=Yes): " + rs.getInt("availability"));
+            System.out.print(rs.getInt("id"));
+            System.out.print("|" + rs.getString("name"));
+            System.out.print("|" + rs.getInt("age"));
+            System.out.print("|" + rs.getString("title"));
+            System.out.print("|" + rs.getString("department"));
+            System.out.print("|" + rs.getInt("phone"));
+            System.out.print("|" + rs.getString("address"));
+            System.out.println("|" + rs.getInt("availability"));
         }
     }
     
@@ -792,17 +803,19 @@ public class Dbms {
     }
     
     static void displayCustomers(Statement stmt) throws Exception {
+        Scanner sc = new Scanner(System.in);
         System.out.println("Enter Hotel ID: ");
         int hotel_id = sc.nextInt();
         System.out.println("Customer List\n");
-        ResultSet rs = stmt.executeQuery("SELECT * FROM customers WHERE id IN (SELECT customer_id FROM customer_makes WHERE reservtion_id IN (SELECT reservation_id FROM reservation_for WHERE hotel_id = " + hotel_id + "))");
+        ResultSet rs = stmt.executeQuery("SELECT * FROM customers WHERE id IN (SELECT customer_id FROM customer_makes WHERE reservation_id IN (SELECT reservation_id FROM reservation_for WHERE hotel_id = " + hotel_id + "))");
         
+        System.out.println("ID|Name|DOB|Phone|Email");
         while(rs.next()) {
-            System.out.println("\nDetails of Customer #" + rs.getInt("id") + ":\n");
-            System.out.println("Name: " + rs.getString("name"));
-            System.out.println("\nDOB: " + rs.getString("dob"));
-            System.out.println("\nPhone: " + rs.getInt("phone"));
-            System.out.println("\nEmail: " + rs.getString("email"));
+            System.out.print(rs.getInt("id"));
+            System.out.print("|" + rs.getString("name"));
+            System.out.print("|" + rs.getString("dob"));
+            System.out.print("|" + rs.getInt("phone"));
+            System.out.println("|" + rs.getString("email"));
         }
     }
     
@@ -891,6 +904,7 @@ public class Dbms {
     }
     
     static void displayServices(Statement stmt) throws Exception {
+        Scanner sc = new Scanner(System.in);
         System.out.println("Enter Reservation ID: ");
         int reservation_id = sc.nextInt();
         System.out.println("Services List\n");
@@ -988,7 +1002,7 @@ public class Dbms {
         
         conn.setAutoCommit(false);
         try {
-            rs = stmt.executeQuery("SELECT reservation_id FROM reservation_for WHERE room_no =" + no + " AND hotel_id = " + hotel_id);
+            rs = stmt.executeQuery("SELECT reservation_id FROM reservation_for WHERE reservation_id IN (SELECT id FROM reservations WHERE has_paid = 0) AND room_no =" + no + " AND hotel_id = " + hotel_id);
             rs.next();
             reservation_id = rs.getInt("reservation_id");
             
@@ -999,10 +1013,9 @@ public class Dbms {
             stmt.executeUpdate("UPDATE reservations SET total_amount = (SELECT SUM(price) FROM services WHERE reservation_id = " + reservation_id + ") + " + room_price + " WHERE id = " + reservation_id);
             stmt.executeUpdate("UPDATE reservations SET total_amount = " +
                                "CASE WHEN payment_method = \"hotel credit\" THEN (total_amount * 0.95) ELSE (total_amount) END WHERE has_paid = 0");
-            
             //Itemized receipt
-            System.out.println("-----------RECEIPT-----------\n");
-            System.out.println("Room price: " + );
+            System.out.println("\n-----------RECEIPT-----------\n");
+            System.out.println("Room price: " + room_price);
             rs = stmt.executeQuery("SELECT name, price FROM services WHERE reservation_id = " + reservation_id);
             while(rs.next()) {
                 String name = rs.getString("name");
@@ -1012,12 +1025,10 @@ public class Dbms {
             //Total amount
             rs = stmt.executeQuery("SELECT total_amount FROM reservations WHERE id = " + reservation_id);
             rs.next();
-            System.out.println("\n\tTotal: " + rs.getDouble("total_amount"));
+            System.out.println("Total: " + rs.getDouble("total_amount"));
             stmt.executeUpdate("UPDATE rooms SET is_available = 1 WHERE hotel_id = " + hotel_id + " AND no = " + no);
             stmt.executeUpdate("UPDATE reservations SET has_paid = 1 WHERE has_paid = 0 AND id = " + reservation_id);
-            //Delete from reservation_for
-            stmt.executeQuery("DELETE FROM reservation_for WHERE reservation_id = " + reservation_id);
-            System.out.println("\nCheck-out success!");
+            System.out.println("\nCheck-out success!\n");
             conn.commit();
         }
         catch(Exception e) {
@@ -1076,7 +1087,7 @@ public class Dbms {
     
     static void occTotal(Statement stmt) throws Exception {
         System.out.println("Report: Total occupancy\n\n");
-        ResultSet rs = stmt.executeQuery("SELECT COUNT(*) AS TOTAL_OCC, 100*COUNT(*)/(SELECT COUNT(*) FROM rooms) AS PERC FROM reservation_for");
+        ResultSet rs = stmt.executeQuery("SELECT COUNT(*) AS TOTAL_OCC, 100*COUNT(*)/(SELECT COUNT(*) FROM rooms) AS PERC FROM reservation_for WHERE reservation_id IN (SELECT id FROM reservations WHERE has_paid = 0)");
         while(rs.next()) {
             int cnt = rs.getInt("TOTAL_OCC");
             double occ = rs.getDouble("PERC");
@@ -1129,14 +1140,14 @@ public class Dbms {
             int phone = rs.getInt("phone");
             int availability = rs.getInt("availability");
             int age = rs.getInt("age");
-            System.out.println("STAFF ID #" + id);
-            System.out.println("\n\tName: " + name);
-            System.out.println("\n\tAge: " + age);
-            System.out.println("\n\tTitle: " + title);
-            System.out.println("\n\tDepartment: " + dept);
-            System.out.println("\n\tAddress: " + address);
-            System.out.println("\n\tPhone: " + phone);
-            System.out.println("\n\tAvailability: " + availability);
+            System.out.println("\nSTAFF ID #" + id);
+            System.out.println("Name: " + name);
+            System.out.println("Age: " + age);
+            System.out.println("Title: " + title);
+            System.out.println("Department: " + dept);
+            System.out.println("Address: " + address);
+            System.out.println("Phone: " + phone);
+            System.out.println("Availability: " + availability);
         }
     }
     
@@ -1293,25 +1304,25 @@ public class Dbms {
         
         //Populate the STAFF table
         stmt.executeUpdate("INSERT INTO staff (name,age,title,department,phone,address,availability) " +
-                           "VALUES ('Mary', 40, 'Manager',  'Management', 654, '90 ABC St , Raleigh NC 27', 1)");
+                           "VALUES ('Mary', 40, 'Manager',  'Management', 654, 'Raleigh NC', 1)");
         
         stmt.executeUpdate("INSERT INTO staff (name,age,title,department,phone,address,availability)" +
-                           "VALUES ('John', 45, 'Manager',  'Management', 564, '798 XYZ St , Rochester NY 54', 1)");
+                           "VALUES ('John', 45, 'Manager',  'Management', 564, 'Rochester NY', 1)");
         
         stmt.executeUpdate("INSERT INTO staff (name,age,title,department,phone,address,availability) " +
-                           "VALUES ('Carol', 55, 'Manager',  'Management', 564, '351 MH St , Greensboro NC 27', 1)");
+                           "VALUES ('Carol', 55, 'Manager',  'Management', 564, 'Greensboro NC', 1)");
         
         stmt.executeUpdate("INSERT INTO staff (name,age,title,department,phone,address,availability)" +
-                           "VALUES ('Emma', 55, 'Front Desk Staff',  'Management', 546, '49 ABC St , Raleigh NC 27', 1)");
+                           "VALUES ('Emma', 55, 'Front Desk Staff',  'Management', 546, 'Raleigh NC', 1)");
         
         stmt.executeUpdate("INSERT INTO staff (name,age,title,department,phone,address,availability)" +
-                           "VALUES ('Ava', 55, 'Catering Staff',  'Catering', 777, '425 RG St , Raleigh NC 27', 1)");
+                           "VALUES ('Ava', 55, 'Catering Staff',  'Catering', 777, 'Raleigh NC', 1)");
         
         stmt.executeUpdate("INSERT INTO staff (name,age,title,department,phone,address,availability)" +
-                           "VALUES ('Peter', 52, 'Manager',  'Management', 724, '475 RG St , Raleigh NC 27', 1)");
+                           "VALUES ('Peter', 52, 'Manager',  'Management', 724, 'Raleigh NC', 1)");
         
         stmt.executeUpdate("INSERT INTO staff (name,age,title,department,phone,address,availability)" +
-                           "VALUES ('Olivia', 27, 'Front Desk Staff',  'Management', 799, '325 PD St , Raleigh NC 27', 1)");
+                           "VALUES ('Olivia', 27, 'Front Desk Staff',  'Management', 799, 'Raleigh NC', 1)");
         
         // Populate the HOTELS table
         stmt.executeUpdate("INSERT INTO hotels (name,address,phone,manager_id)" +
