@@ -8,13 +8,14 @@ public class InitJDBC {
     
     Connection conn;
     Statement stmt;
-    
+    /* Database to which connection is established */
     String jdbcURL = "jdbc:mariadb://classdb2.csc.ncsu.edu:3306/skandur";
-    
+    /* InitJDBC() - To CREATE and INSERT records into tables in the databse */
     public InitJDBC(MgmtSys dbms) {
         try {
+            /* Initialize JDBC driver */
             Class.forName("org.mariadb.jdbc.Driver");
-            
+            /* Login details of user to access database */
             String user = "skandur";
             String passwd = "200204421";
             
@@ -24,10 +25,13 @@ public class InitJDBC {
             try {
                 conn = DriverManager.getConnection(jdbcURL, user, passwd);
                 stmt = conn.createStatement();
-                
+                /* */
                 Menu menu = new Menu(dbms, this);
+                /* Drop any existing tables in the database */
                 dropTables(stmt);
+                /* Create tables */
                 createTables(stmt);
+                /* Insert records into the tables */
                 populateDemoData(stmt);
                 do {
                     logout = false;
@@ -44,13 +48,12 @@ public class InitJDBC {
             oops.printStackTrace();
         }
     }
-    
+    /* close() - To close the appropriate connection to the databse */
     void close(Connection conn) {
         if(conn != null) {
             try { conn.close(); } catch(Throwable whatever) {}
         }
     }
-    
     void close(Statement st) {
         if(st != null) {
             try { st.close(); } catch(Throwable whatever) {}
@@ -62,7 +65,7 @@ public class InitJDBC {
             try { rs.close(); } catch(Throwable whatever) {}
         }
     }
-    
+    /* dropTables() - Drop pre-existing tables from the database */
     void dropTables(Statement stmt) throws Exception{
         stmt.executeUpdate("DROP TABLE IF EXISTS customer_makes");
         stmt.executeUpdate("DROP TABLE IF EXISTS reservation_for");
@@ -75,7 +78,7 @@ public class InitJDBC {
         stmt.executeUpdate("DROP TABLE IF EXISTS reservations");
         stmt.executeUpdate("DROP TABLE IF EXISTS staff");
     }
-    
+    /* createTables() - Create new tables in the database */
     void createTables(Statement stmt) throws Exception{
         // Create the CUSTOMERS table
         stmt.executeUpdate("CREATE TABLE IF NOT EXISTS customers (" +
@@ -199,7 +202,7 @@ public class InitJDBC {
                            "FOREIGN KEY(service_id,reservation_id) REFERENCES services(id,reservation_id) " +
                            "ON DELETE CASCADE ON UPDATE CASCADE)");
     }
-    
+    /*populateDemoData() - Insert records into the tables in the database */
     void populateDemoData(Statement stmt) throws Exception{
         //Populate the CUSTOMERS table
         stmt.executeUpdate("INSERT INTO customers (name,dob,phone,email,ssn) " +
@@ -248,18 +251,20 @@ public class InitJDBC {
         
         //Populate the ROOMS table
         stmt.executeUpdate("INSERT INTO rooms (no,hotel_id, category, max_occupancy, price, is_available)" +
-                           "VALUES ( 1, 1, 'Economy', 1, 100, 0)");
+                           "VALUES ( 1, 1, 'Economy', 1, 100, 1)");
         stmt.executeUpdate("INSERT INTO rooms (no,hotel_id, category, max_occupancy, price, is_available)" +
-                           "VALUES ( 2, 1, 'Deluxe', 2, 200, 0)");
+                           "VALUES ( 2, 1, 'Deluxe', 2, 200, 1)");
         stmt.executeUpdate("INSERT INTO rooms (no,hotel_id, category, max_occupancy, price, is_available)" +
-                           "VALUES ( 3, 2, 'Economy', 1, 100, 0)");
+                           "VALUES ( 3, 2, 'Economy', 1, 100, 1)");
         stmt.executeUpdate("INSERT INTO rooms (no,hotel_id, category, max_occupancy, price, is_available)" +
-                           "VALUES ( 2, 3, 'Executive', 3, 1000, 0)");
+                           "VALUES ( 2, 3, 'Executive', 3, 1000, 1)");
         stmt.executeUpdate("INSERT INTO rooms (no,hotel_id, category, max_occupancy, price, is_available)" +
                            "VALUES ( 1, 4, 'Presidential', 4, 5000, 1)");
         stmt.executeUpdate("INSERT INTO rooms (no,hotel_id, category, max_occupancy, price, is_available)" +
                            "VALUES ( 5, 1, 'Deluxe', 2, 200, 1)");
-        
+        stmt.executeUpdate("INSERT INTO rooms (no,hotel_id, category, max_occupancy, price, is_available)" +
+                           "VALUES ( 1, 6, 'Deluxe', 2, 200, 0)");
+
         //Populate the STAFF_WORKS_AT table
         stmt.executeUpdate("INSERT INTO staff_works_at (hotel_id, staff_id)" +
                            "VALUES (1, 1)");
@@ -286,17 +291,18 @@ public class InitJDBC {
         // no_of_guests start_date  end_date check_in_time check_out_time total_amount payment_method card_no expiry billing_address has_paid
         
         stmt.executeUpdate("INSERT INTO reservations (no_of_guests, start_date,  end_date, check_in_time, check_out_time, total_amount, payment_method, card_no, expiry, billing_address, has_paid)" +
-                           "VALUES (1, '2017-05-10', '2017-05-13', '3:17:00', '10:22:00', 331.0, 'credit', 1052, NULL, '980 TRT St , Raleigh NC', 1)");
+                           "VALUES (1, '2017-05-10', '2017-05-13', '3:17:00', '10:22:00', 331.0, 'credit', 1052, NULL, 'Raleigh NC', 1)");
         
         stmt.executeUpdate("INSERT INTO reservations (no_of_guests, start_date,  end_date, check_in_time, check_out_time, total_amount, payment_method, card_no, expiry, billing_address, has_paid)" +
-                           "VALUES (2, '2017-05-10', '2017-05-13', '4:11:00', '9:27:00', 615.0, 'credit', 3020, NULL, '7720 MHT St , Greensboro NC', 1)");
+                           "VALUES (2, '2017-05-10', '2017-05-13', '4:11:00', '9:27:00', 615.0, 'credit', 3020, NULL, 'Greensboro NC', 1)");
         
         stmt.executeUpdate("INSERT INTO reservations (no_of_guests, start_date,  end_date, check_in_time, check_out_time, total_amount, payment_method, card_no, expiry, billing_address, has_paid)" +
-                           "VALUES (1, '2016-05-10', '2016-05-14', '3:45:00', '11:10:00', 410.0, 'credit', 2497, NULL, '231 DRY St , Rochester NY 78', 1)");
+                           "VALUES (1, '2016-05-10', '2016-05-14', '3:45:00', '11:10:00', 410.0, 'credit', 2497, NULL, 'Rochester NY 78', 1)");
         
         stmt.executeUpdate("INSERT INTO reservations (no_of_guests, start_date,  end_date, check_in_time, check_out_time, total_amount, payment_method, card_no, expiry, billing_address, has_paid)" +
-                           "VALUES (2, '2018-05-10', '2018-05-12', '2:30:00', '10:00:00', 0, 'cash', NULL, NULL, '24 BST Dr , Dallas TX 14', 0)");
+                           "VALUES (2, '2018-04-16', '2018-04-20', '2:30:00', '10:00:00', 0, 'cash', NULL, NULL, 'Dallas TX 14', 0)");
         
+
         //Populate the RESERVATION_FOR table
         //hotel,room.
         stmt.executeUpdate("INSERT INTO reservation_for (reservation_id, room_no, hotel_id)" +
