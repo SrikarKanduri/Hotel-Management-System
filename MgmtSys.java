@@ -9,6 +9,7 @@ public class MgmtSys {
         InitJDBC jdbc = new InitJDBC(dbms);
     }
     
+    /* addHotel() - Insert a new record into the 'hotels' table */
     void addHotel(Statement stmt) throws Exception {
         String name, address;
         long phone;
@@ -29,6 +30,7 @@ public class MgmtSys {
         stmt.executeUpdate("INSERT INTO hotels (name, address, phone, manager_id) VALUES ("+ "\"" + name + "\",\"" + address + "\"," + phone + "," + mid + ")");
     }
     
+    /* deleteHotel() - Delete a record from the 'hotels' table */
     void deleteHotel(Statement stmt) throws Exception {
         int id;
         Scanner sc = new Scanner(System.in);
@@ -40,6 +42,7 @@ public class MgmtSys {
         stmt.executeUpdate("DELETE FROM hotels where id ="+ id);
     }
     
+    /* updateHotel() - Update a record in the 'hotels' table */
     void updateHotel(Statement stmt) throws Exception {
         String name = "", address = "", temp, query;
         long phone = 0;
@@ -52,6 +55,7 @@ public class MgmtSys {
         System.out.println("Enter hotel ID: ");
         id = sc.nextInt();
         sc.nextLine();
+        //Get previous data. Useful when all the entered new data is empty
         rs = stmt.executeQuery("SELECT name, address, phone, manager_id FROM hotels WHERE id = " + id);
         
         while(rs.next()) {
@@ -63,6 +67,7 @@ public class MgmtSys {
         
         System.out.println("Enter new name: ");
         temp = sc.nextLine();
+        //Check if the field is empty. If empty, record is updated with already existing value
         if(temp.length() != 0){
             name = temp;
         }
@@ -89,9 +94,11 @@ public class MgmtSys {
         }
         query = query + " manager_id = " + mid;
         query = query + " WHERE id =" + id;
+        //Execute query with the new/pre-existing values
         stmt.executeUpdate(query);
     }
     
+    /* displayHotels() - Display records in the 'hotels' table */
     void displayHotels(Statement stmt) throws Exception {
         Scanner sc = new Scanner(System.in);
         System.out.println("Hotel List\n");
@@ -107,6 +114,7 @@ public class MgmtSys {
         }
     }
     
+    /* addRoom() - Insert a new record into the 'rooms' table */
     void addRoom(Statement stmt) throws Exception {
         String name, category;
         int no, hid, occ, availability;
@@ -136,6 +144,7 @@ public class MgmtSys {
                            price + "," + availability + "," + occ + ",\"" + category + "\")");
     }
     
+    /* deleteRoom() - Delete a record from the 'rooms' table */
     void deleteRoom(Statement stmt) throws Exception {
         int no,hid;
         Scanner sc = new Scanner(System.in);
@@ -149,6 +158,7 @@ public class MgmtSys {
         stmt.executeUpdate("DELETE from rooms WHERE no = "+ no +" and hotel_id="+hid);
     }
     
+    /* updateRoom() - Update a record in the 'rooms' table */
     void updateRoom(Statement stmt) throws Exception {
         String name, category = "", temp, query;
         int no, hid, occ = 0, availability = 0;
@@ -204,6 +214,7 @@ public class MgmtSys {
         stmt.executeUpdate(query);
     }
     
+    /* displayRooms() - Display records in the 'rooms' table */
     void displayRooms(Statement stmt) throws Exception {
         Scanner sc = new Scanner(System.in);
         System.out.println("Room List\n");
@@ -220,6 +231,7 @@ public class MgmtSys {
         }
     }
     
+    /* addStaff() - Insert a new record into the 'staff' table */
     void addStaff(Statement stmt) throws Exception {
         String name, title, department, address;
         int age, availability, hid, staff_id;
@@ -253,6 +265,7 @@ public class MgmtSys {
         stmt.executeUpdate("INSERT INTO staff_works_at (hotel_id, staff_id) VALUES (" + hid + "," + staff_id + ")");
     }
     
+    /* deleteStaff() - Delete a record from the 'staff' table */
     void deleteStaff(Statement stmt) throws Exception {
         int id;
         Scanner sc = new Scanner(System.in);
@@ -263,6 +276,7 @@ public class MgmtSys {
         stmt.executeUpdate("delete from staff where id ="+ id);
     }
     
+    /* updateRoom() - Update a record in the 'staff' table */
     void updateStaff(Statement stmt) throws Exception {
         String name = "", title = "", dept = "", address = "", query, temp;
         int id, age = 0, availability = 0;
@@ -329,6 +343,7 @@ public class MgmtSys {
         stmt.executeUpdate(query);
     }
     
+    /* displayStaff() - Display records in the 'staff' table */
     void displayStaff(Statement stmt) throws Exception {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter Hotel ID: ");
@@ -349,6 +364,7 @@ public class MgmtSys {
         }
     }
     
+    /* addCustomer() - Insert a new record into the 'customers' table */
     void addCustomer(Statement stmt) throws Exception {
         String name, dob, email;
         long phone, ssn;
@@ -370,6 +386,7 @@ public class MgmtSys {
         stmt.executeUpdate("INSERT INTO customers (name, dob, phone, email, ssn) VALUES (\"" + name + "\",\"" + dob + "\"," + phone + ",\"" + email + "\"," + ssn + ")");
     }
     
+    /* deleteCustomer() - Delete a record from the 'customers' table */
     void deleteCustomer(Statement stmt) throws Exception {
         int id;
         Scanner sc = new Scanner(System.in);
@@ -380,6 +397,7 @@ public class MgmtSys {
         stmt.executeUpdate("DELETE FROM customers where id ="+ id);
     }
     
+    /* updateCustomer() - Update a record in the 'customers' table */
     void updateCustomer(Statement stmt) throws Exception {
         String name = "", dob = "0000-00-00", email = "", temp, query;
         int id;
@@ -440,6 +458,7 @@ public class MgmtSys {
         stmt.executeUpdate(query);
     }
     
+    /* displayCustomers() - Display records in the 'customers' table */
     void displayCustomers(Statement stmt) throws Exception {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter Hotel ID: ");
@@ -457,6 +476,7 @@ public class MgmtSys {
         }
     }
     
+    /* addService() - Insert a new record into the 'services' table */
     void addService(Statement stmt) throws Exception {
         String name;
         int reservation_id, staff_id, service_id;
@@ -482,6 +502,7 @@ public class MgmtSys {
         stmt.executeUpdate("INSERT INTO staff_provides (reservation_id, staff_id, service_id) VALUES (" + reservation_id + "," + staff_id + "," + service_id + ")");
     }
     
+    /* updateService() - Update a record in the 'services' table */
     void updateService(Statement stmt, Connection conn) throws Exception {
         String name = "", temp, query;
         int reservation_id, staff_id = 0, service_id, old_staff_id = 0;
@@ -541,6 +562,7 @@ public class MgmtSys {
         }
     }
     
+    /* displayServices() - Display records in the 'services' table */
     void displayServices(Statement stmt) throws Exception {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter Reservation ID: ");
@@ -552,6 +574,7 @@ public class MgmtSys {
             System.out.println("\n" + rs.getString("name") + "\tPrice: " + rs.getDouble("price"));
     }
     
+    /* assignRoom() - Inserts a new reservation in the 'reservations' table */
     void assignRoom(Statement stmt, Connection conn) throws Exception {
         String category, dob, email, start_date, end_date, check_in_time, check_out_time, payment_method, expiry, billing_address;
         int hid, cid, no_of_guests, reservation_id;
@@ -570,8 +593,11 @@ public class MgmtSys {
         System.out.println("Enter room category: ");
         category = sc.nextLine();
         
+        //Check if a room of desired category is available
         String query = "SELECT no FROM rooms WHERE category = '" + category + "' AND hotel_id = " + hid + " AND is_available = 1";
         rs = stmt.executeQuery(query);
+        
+        //If no rooms available, print and return
         if(!rs.isBeforeFirst()) {
             System.out.println("No rooms available\n");
         } else {
@@ -593,6 +619,7 @@ public class MgmtSys {
                 check_out_time = sc.nextLine();
                 System.out.println("Enter payment method: ");
                 payment_method = sc.nextLine();
+                //Insert a new record into the 'reservations' table
                 if(!payment_method.equals("cash")) {
                     System.out.println("Enter card no: ");
                     card_no = sc.nextLong();
@@ -603,28 +630,39 @@ public class MgmtSys {
                     billing_address = sc.nextLine();
                     stmt.executeUpdate("INSERT INTO reservations (no_of_guests, start_date,  end_date, check_in_time, check_out_time, total_amount, payment_method, card_no, expiry, billing_address, has_paid) VALUES (" + no_of_guests + ",\"" + start_date + "\",\"" +  end_date + "\",\"" + check_in_time + "\",\"" + check_out_time + "\",0,\"" + payment_method + "\"," + card_no + ",\"" + expiry + "\",\"" + billing_address + "\",0)", Statement.RETURN_GENERATED_KEYS);
                 } else {
+                    //If payment method is cash, fill credit fields with NULL
                     stmt.executeUpdate("INSERT INTO reservations (no_of_guests, start_date,  end_date, check_in_time, check_out_time, total_amount, payment_method, card_no, expiry, billing_address, has_paid) VALUES (" + no_of_guests + ",\"" + start_date + "\",\"" +  end_date + "\",\"" + check_in_time + "\",\"" + check_out_time + "\",0,\"" + payment_method + "\""+",NULL, NULL, NULL, 0)", Statement.RETURN_GENERATED_KEYS);
                 }
                 rs = stmt.getGeneratedKeys();
                 rs.next();
                 reservation_id = rs.getInt(1);
+                
+                //Insert a record that relates customer to his reservation
                 stmt.executeUpdate("INSERT INTO customer_makes(reservation_id, customer_id) VALUES (" + reservation_id + "," + cid + ")");
+                
+                //Insert a record that relates a reservation with its hotel and room
                 stmt.executeUpdate("INSERT INTO reservation_for(reservation_id, hotel_id, room_no) VALUES(" + reservation_id + "," + hid + "," + no + ")");
+                
+                //Update the room to be not available
                 stmt.executeUpdate("UPDATE rooms SET is_available = 0 WHERE hotel_id =  " + hid + " AND no = " + no);
                 System.out.println("Room reservation success!");
+                
+                //If transaction succeeds, commit to the database
                 conn.commit();
-                //   conn.setAutoCommit(true);
             }
             catch(Exception e) {
+                System.out.println("Reservation failed. Rolling back!");
+                //If transaction fails, roll back on all the above queries
                 conn.rollback();
             }
             finally {
+                //Setting back AutoCommit to true
                 conn.setAutoCommit(true);
             }
         }
     }
     
-    
+    /* generateBill() - Displays Itemized Receipt */
     void generateBill(Statement stmt, Connection conn) throws Exception {
         int hotel_id, reservation_id, no;
         double room_price;
@@ -641,18 +679,22 @@ public class MgmtSys {
         
         conn.setAutoCommit(false);
         try {
+            //Get the reservation ID for the reservation to be billed
             rs = stmt.executeQuery("SELECT reservation_id FROM reservation_for WHERE reservation_id IN (SELECT id FROM reservations WHERE has_paid = 0) AND room_no =" + no + " AND hotel_id = " + hotel_id);
             rs.next();
             reservation_id = rs.getInt("reservation_id");
             
+            //Calculate the total room price as (nightly price * number of days reserved)
             rs = stmt.executeQuery("SELECT price * (SELECT DATEDIFF(end_date,start_date) FROM reservations WHERE id = " + reservation_id + ") AS price FROM rooms WHERE no = " + no + " AND hotel_id = " + hotel_id);
             rs.next();
             room_price = rs.getDouble("price");
             
+            //Set total amount to be billed in the 'reservations' table. Total = sum of services + total room price
             stmt.executeUpdate("UPDATE reservations SET total_amount = (SELECT SUM(price) FROM services WHERE reservation_id = " + reservation_id + ") + " + room_price + " WHERE id = " + reservation_id);
             stmt.executeUpdate("UPDATE reservations SET total_amount = " +
                                "CASE WHEN payment_method = \"hotel credit\" THEN (total_amount * 0.95) ELSE (total_amount) END WHERE has_paid = 0");
-            //Itemized receipt
+            
+            //Display Itemized receipt
             System.out.println("\n-----------RECEIPT-----------\n");
             System.out.println("Room price (for the whole stay): $" + room_price);
             rs = stmt.executeQuery("SELECT name, price FROM services WHERE reservation_id = " + reservation_id);
@@ -661,7 +703,8 @@ public class MgmtSys {
                 double price = rs.getDouble("price");
                 System.out.println("\n" + name + ": $"+ price);
             }
-            //Total amount
+            
+            //Display Total amount
             rs = stmt.executeQuery("SELECT total_amount FROM reservations WHERE id = " + reservation_id);
             rs.next();
             System.out.println("\nTOTAL AMOUNT: $" + rs.getDouble("total_amount"));
@@ -678,6 +721,7 @@ public class MgmtSys {
         }
     }
     
+    /* occHotel() - Display current occupancy % of hotels */
     void occHotel(Statement stmt) throws Exception {
         System.out.println("Report: Occupancy by Hotel\n\n");
         ResultSet rs = stmt.executeQuery("SELECT hotel_id, 100 - (100*SUM(is_available)/COUNT(is_available)) AS H_OCC FROM rooms GROUP BY hotel_id");
@@ -689,6 +733,7 @@ public class MgmtSys {
         }
     }
     
+    /* occRoomType() - Display current occupancy % by room types */
     void occRoomType(Statement stmt) throws Exception {
         System.out.println("Report: Occupancy by Room Type\n\n");
         ResultSet rs = stmt.executeQuery("SELECT category, 100 - (100*SUM(is_available)/COUNT(is_available)) AS R_OCC FROM rooms GROUP BY category");
@@ -700,8 +745,9 @@ public class MgmtSys {
         }
     }
     
+    /* occDateRange() - Display room occupancy % in a date-range */
     void occDateRange(Statement stmt) throws Exception {
-        System.out.println("Report: Occupancy by Date Range\n\n");
+        System.out.println("Report: Room Occupancy by Date Range\n\n");
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter Start date: ");
         String start = sc.nextLine();
@@ -713,6 +759,7 @@ public class MgmtSys {
         System.out.println("Room occupancy: " + rs.getDouble("D_OCC") + "%\n");
     }
     
+    /* occCity() - Display current room occupancy % in a city */
     void occCity(Statement stmt) throws Exception {
         System.out.println("Report: Occupancy by City Address\n\n");
         ResultSet rs = stmt.executeQuery("SELECT address AS city, 100 - (100*SUM(is_available)/COUNT(is_available)) AS C_OCC FROM rooms, hotels WHERE hotel_id = id GROUP BY address");
@@ -724,6 +771,7 @@ public class MgmtSys {
         }
     }
     
+    /* occTotal() - Display current room occupancy */
     void occTotal(Statement stmt) throws Exception {
         System.out.println("Report: Total occupancy\n\n");
         ResultSet rs = stmt.executeQuery("SELECT COUNT(*) AS TOTAL_OCC, 100*COUNT(*)/(SELECT COUNT(*) FROM rooms) AS PERC FROM reservation_for WHERE reservation_id IN (SELECT id FROM reservations WHERE has_paid = 0)");
@@ -735,6 +783,7 @@ public class MgmtSys {
         }
     }
     
+    /* revenue() - Display revenue earned by a hotel during a date-range */
     void revenue(Statement stmt) throws Exception {
         System.out.println("Report: Total revenue by hotel for given date range\n\n");
         Scanner sc = new Scanner(System.in);
@@ -752,6 +801,7 @@ public class MgmtSys {
         System.out.println("Total Revenue: $" + total);
     }
     
+    /* staffInfoByRole() - Display staff count by their roles */
     void staffInfoByRole(Statement stmt) throws Exception {
         System.out.println("Report: Staff information by role\n\n");
         ResultSet rs = stmt.executeQuery("SELECT title, department, COUNT(*) AS cnt FROM staff GROUP BY title, department;");
@@ -763,6 +813,7 @@ public class MgmtSys {
         }
     }
     
+    /* staffInfoByCust() - Display information of staff that served a customer during his stay */
     void staffInfoByCust(Statement stmt) throws Exception {
         System.out.println("Report: Staff information by customer served\n\n");
         Scanner sc = new Scanner(System.in);
