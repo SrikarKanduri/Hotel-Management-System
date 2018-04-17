@@ -257,13 +257,12 @@ public class InitJDBC {
         stmt.executeUpdate("INSERT INTO rooms (no,hotel_id, category, max_occupancy, price, is_available)" +
                            "VALUES ( 3, 2, 'Economy', 1, 100, 1)");
         stmt.executeUpdate("INSERT INTO rooms (no,hotel_id, category, max_occupancy, price, is_available)" +
-                           "VALUES ( 2, 3, 'Executive', 3, 1000, 1)");
+                           "VALUES ( 2, 3, 'Executive', 3, 1000, 0)");
         stmt.executeUpdate("INSERT INTO rooms (no,hotel_id, category, max_occupancy, price, is_available)" +
                            "VALUES ( 1, 4, 'Presidential', 4, 5000, 1)");
         stmt.executeUpdate("INSERT INTO rooms (no,hotel_id, category, max_occupancy, price, is_available)" +
                            "VALUES ( 5, 1, 'Deluxe', 2, 200, 1)");
-        stmt.executeUpdate("INSERT INTO rooms (no,hotel_id, category, max_occupancy, price, is_available)" +
-                           "VALUES ( 1, 6, 'Deluxe', 2, 200, 0)");
+
 
         //Populate the STAFF_WORKS_AT table
         stmt.executeUpdate("INSERT INTO staff_works_at (hotel_id, staff_id)" +
