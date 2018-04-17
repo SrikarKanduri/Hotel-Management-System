@@ -64,16 +64,16 @@ public class InitJDBC {
     }
     
     void dropTables(Statement stmt) throws Exception{
-        stmt.executeUpdate("DROP TABLE customer_makes");
-        stmt.executeUpdate("DROP TABLE reservation_for");
-        stmt.executeUpdate("DROP TABLE staff_works_at");
-        stmt.executeUpdate("DROP TABLE staff_provides");
-        stmt.executeUpdate("DROP TABLE customers");
-        stmt.executeUpdate("DROP TABLE services");
-        stmt.executeUpdate("DROP TABLE rooms");
-        stmt.executeUpdate("DROP TABLE hotels");
-        stmt.executeUpdate("DROP TABLE reservations");
-        stmt.executeUpdate("DROP TABLE staff");
+        stmt.executeUpdate("DROP TABLE IF EXISTS customer_makes");
+        stmt.executeUpdate("DROP TABLE IF EXISTS reservation_for");
+        stmt.executeUpdate("DROP TABLE IF EXISTS staff_works_at");
+        stmt.executeUpdate("DROP TABLE IF EXISTS staff_provides");
+        stmt.executeUpdate("DROP TABLE IF EXISTS customers");
+        stmt.executeUpdate("DROP TABLE IF EXISTS services");
+        stmt.executeUpdate("DROP TABLE IF EXISTS rooms");
+        stmt.executeUpdate("DROP TABLE IF EXISTS hotels");
+        stmt.executeUpdate("DROP TABLE IF EXISTS reservations");
+        stmt.executeUpdate("DROP TABLE IF EXISTS staff");
     }
     
     void createTables(Statement stmt) throws Exception{
@@ -82,9 +82,9 @@ public class InitJDBC {
                            "id INT PRIMARY KEY NOT NULL AUTO_INCREMENT, " +
                            "name VARCHAR(128) NOT NULL, " +
                            "dob DATE NOT NULL, " +
-                           "phone INT NOT NULL, " +
+                           "phone BIGINT NOT NULL, " +
                            "email VARCHAR(128) NOT NULL, " +
-                           "ssn INT NOT NULL UNIQUE)");
+                           "ssn BIGINT NOT NULL UNIQUE)");
         
         // Create the STAFF table
         stmt.executeUpdate("CREATE TABLE IF NOT EXISTS staff ( " +
@@ -93,7 +93,7 @@ public class InitJDBC {
                            "age INT NOT NULL, " +
                            "title VARCHAR(128) NOT NULL, " +
                            "department VARCHAR(128) NOT NULL, " +
-                           "phone INT NOT NULL, " +
+                           "phone BIGINT NOT NULL, " +
                            "address VARCHAR(128) NOT NULL, " +
                            "availability TINYINT(1) NOT NULL)");
         
@@ -102,7 +102,7 @@ public class InitJDBC {
                            "id INT PRIMARY KEY AUTO_INCREMENT, " +
                            "name VARCHAR(128) NOT NULL, " +
                            "address VARCHAR(128) NOT NULL, " +
-                           "phone INT NOT NULL, " +
+                           "phone BIGINT NOT NULL, " +
                            "manager_id INT, " +
                            "CONSTRAINT manager_hotel_fk " +
                            "FOREIGN KEY(manager_id) REFERENCES staff(id) " +

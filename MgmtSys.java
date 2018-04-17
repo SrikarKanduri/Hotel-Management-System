@@ -11,7 +11,8 @@ public class MgmtSys {
     
     void addHotel(Statement stmt) throws Exception {
         String name, address;
-        int phone, mid;
+        long phone;
+        int mid;
         Scanner sc = new Scanner(System.in);
         
         System.out.println("Add a Hotel\n\n");
@@ -20,7 +21,7 @@ public class MgmtSys {
         System.out.println("Enter address: ");
         address = sc.nextLine();
         System.out.println("Enter phone: ");
-        phone = sc.nextInt();
+        phone = sc.nextLong();
         sc.nextLine();
         System.out.println("Enter manager ID: ");
         mid = sc.nextInt();
@@ -41,7 +42,8 @@ public class MgmtSys {
     
     void updateHotel(Statement stmt) throws Exception {
         String name = "", address = "", temp, query;
-        int phone = 0, id, mid = 0;
+        long phone = 0;
+        int id, mid = 0;
         Scanner sc = new Scanner(System.in);
         ResultSet rs = null;
         query ="UPDATE hotels SET ";
@@ -55,7 +57,7 @@ public class MgmtSys {
         while(rs.next()) {
             name = rs.getString("name");
             address = rs.getString("address");
-            phone = rs.getInt("phone");
+            phone = rs.getLong("phone");
             mid = rs.getInt("manager_id");
         }
         
@@ -76,7 +78,7 @@ public class MgmtSys {
         System.out.println("Enter new phone: ");
         temp = sc.nextLine();
         if(temp.length() != 0){
-            phone = Integer.valueOf(temp);
+            phone = Long.valueOf(temp);
         }
         query = query + " phone = " + phone + ",";
         
@@ -100,7 +102,7 @@ public class MgmtSys {
             System.out.print(rs.getInt("id"));
             System.out.print("|" + rs.getString("name"));
             System.out.print("|" + rs.getString("address"));
-            System.out.print("|" + rs.getInt("phone"));
+            System.out.print("|" + rs.getLong("phone"));
             System.out.println("|" + rs.getInt("manager_id"));
         }
     }
@@ -220,7 +222,8 @@ public class MgmtSys {
     
     void addStaff(Statement stmt) throws Exception {
         String name, title, department, address;
-        int age, phone, availability, hid, staff_id;
+        int age, availability, hid, staff_id;
+        long phone;
         Scanner sc = new Scanner(System.in);
         
         System.out.println("Add Staff\n\n");
@@ -237,7 +240,7 @@ public class MgmtSys {
         System.out.println("Enter department: ");
         department = sc.nextLine();
         System.out.println("Enter phone: ");
-        phone = sc.nextInt();
+        phone = sc.nextLong();
         sc.nextLine();
         System.out.println("Enter address: ");
         address = sc.nextLine();
@@ -262,7 +265,8 @@ public class MgmtSys {
     
     void updateStaff(Statement stmt) throws Exception {
         String name = "", title = "", dept = "", address = "", query, temp;
-        int id, age = 0, phone = 0, availability = 0;
+        int id, age = 0, availability = 0;
+        long phone = 0;
         Scanner sc = new Scanner(System.in);
         ResultSet rs = null;
         System.out.println("Update Staff\n\n");
@@ -276,7 +280,7 @@ public class MgmtSys {
             availability = rs.getInt("availability");
             title = rs.getString("title");
             dept = rs.getString("department");
-            phone = rs.getInt("phone");
+            phone = rs.getLong("phone");
             address = rs.getString("address");
         }
         query ="UPDATE staff SET ";
@@ -307,7 +311,7 @@ public class MgmtSys {
         System.out.println("Enter new phone: ");
         temp = sc.nextLine();
         if(temp.length() != 0){
-            phone = Integer.valueOf(temp);
+            phone = Long.valueOf(temp);
         }
         query = query + " phone = " + phone + ",";
         System.out.println("Enter new address: ");
@@ -339,7 +343,7 @@ public class MgmtSys {
             System.out.print("|" + rs.getInt("age"));
             System.out.print("|" + rs.getString("title"));
             System.out.print("|" + rs.getString("department"));
-            System.out.print("|" + rs.getInt("phone"));
+            System.out.print("|" + rs.getLong("phone"));
             System.out.print("|" + rs.getString("address"));
             System.out.println("|" + rs.getInt("availability"));
         }
@@ -347,7 +351,7 @@ public class MgmtSys {
     
     void addCustomer(Statement stmt) throws Exception {
         String name, dob, email;
-        int phone, ssn;
+        long phone, ssn;
         Scanner sc = new Scanner(System.in);
         
         System.out.println("Add Customer\n\n");
@@ -356,12 +360,12 @@ public class MgmtSys {
         System.out.println("Enter dob: ");
         dob = sc.nextLine();
         System.out.println("Enter phone: ");
-        phone = sc.nextInt();
+        phone = sc.nextLong();
         sc.nextLine();
         System.out.println("Enter email: ");
         email = sc.nextLine();
         System.out.println("Enter SSN: ");
-        ssn = sc.nextInt();
+        ssn = sc.nextLong();
         
         stmt.executeUpdate("INSERT INTO customers (name, dob, phone, email, ssn) VALUES (\"" + name + "\",\"" + dob + "\"," + phone + ",\"" + email + "\"," + ssn + ")");
     }
@@ -378,7 +382,8 @@ public class MgmtSys {
     
     void updateCustomer(Statement stmt) throws Exception {
         String name = "", dob = "0000-00-00", email = "", temp, query;
-        int id, phone = 0, ssn = 0;
+        int id;
+        long phone = 0, ssn = 0;
         Scanner sc = new Scanner(System.in);
         ResultSet rs = null;
         query ="UPDATE customers SET ";
@@ -392,9 +397,9 @@ public class MgmtSys {
         while(rs.next()) {
             name = rs.getString("name");
             dob = rs.getString("dob");
-            phone = rs.getInt("phone");
+            phone = rs.getLong("phone");
             email = rs.getString("email");
-            ssn = rs.getInt("ssn");
+            ssn = rs.getLong("ssn");
         }
         
         System.out.println("Enter name: ");
@@ -414,7 +419,7 @@ public class MgmtSys {
         System.out.println("Enter phone: ");
         temp = sc.nextLine();
         if(temp.length() != 0){
-            phone = Integer.valueOf(temp);
+            phone = Long.valueOf(temp);
         }
         query = query + " phone = " +  phone + ",";
         
@@ -428,7 +433,7 @@ public class MgmtSys {
         System.out.println("Enter ssn: ");
         temp = sc.nextLine();
         if(temp.length() != 0){
-            ssn = Integer.valueOf(temp);
+            ssn = Long.valueOf(temp);
         }
         query = query + " ssn = " + ssn;
         query = query + " WHERE id = " + id ;
@@ -447,7 +452,7 @@ public class MgmtSys {
             System.out.print(rs.getInt("id"));
             System.out.print("|" + rs.getString("name"));
             System.out.print("|" + rs.getString("dob"));
-            System.out.print("|" + rs.getInt("phone"));
+            System.out.print("|" + rs.getLong("phone"));
             System.out.println("|" + rs.getString("email"));
         }
     }
@@ -549,7 +554,8 @@ public class MgmtSys {
     
     void assignRoom(Statement stmt, Connection conn) throws Exception {
         String category, dob, email, start_date, end_date, check_in_time, check_out_time, payment_method, expiry, billing_address;
-        int hid, cid, phone, ssn, no_of_guests, reservation_id;
+        int hid, cid, no_of_guests, reservation_id;
+        long phone,ssn;
         long card_no;
         ResultSet rs = null;
         Scanner sc = new Scanner(System.in);
@@ -770,7 +776,7 @@ public class MgmtSys {
             String title = rs.getString("title");
             String dept = rs.getString("department");
             String address = rs.getString("address");
-            int phone = rs.getInt("phone");
+            long phone = rs.getLong("phone");
             int availability = rs.getInt("availability");
             int age = rs.getInt("age");
             System.out.println("\nSTAFF ID #" + id);
