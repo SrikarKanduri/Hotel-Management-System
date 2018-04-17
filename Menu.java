@@ -11,6 +11,7 @@ public class Menu {
         this.jdbc = jdbc;
     }
     
+    /* login() - Initially displayed screen to login */
     int login() {
         Scanner sc = new Scanner(System.in);
         System.out.print("\033[H\033[2J");
@@ -23,6 +24,7 @@ public class Menu {
         return access_type;
     }
     
+    /* showOperations() - Displays operations menu based on access type */
     void showOperations(int access_type, Statement stmt, Connection conn) throws Exception {
         
         switch(access_type) {
@@ -41,6 +43,7 @@ public class Menu {
         }
     }
     
+    /* ceoOperations() - Displays CEO's operations */
     void ceoOperations(Statement stmt) throws Exception {
         Scanner sc = new Scanner(System.in);
         
@@ -68,6 +71,7 @@ public class Menu {
         }
     }
     
+    /* mgrOperations() - Displays Manager's operations */
     void mgrOperations(Statement stmt) throws Exception {
         Scanner sc = new Scanner(System.in);
         
@@ -100,6 +104,7 @@ public class Menu {
         }
     }
     
+    /* fdrOperations() - Displays Front Desk Representative's operations */
     void fdrOperations(Statement stmt, Connection conn) throws Exception {
         Scanner sc = new Scanner(System.in);
         
@@ -136,6 +141,7 @@ public class Menu {
         }
     }
     
+    /* manageHotels() - Displays operations on 'hotels' table and calls the selected query */
     void manageHotels(Statement stmt) throws Exception {
         Scanner sc = new Scanner(System.in);
         
@@ -166,6 +172,7 @@ public class Menu {
         }
     }
     
+    /* manageRooms() - Displays operations on 'rooms' table and calls the selected query */
     void manageRooms(Statement stmt) throws Exception {
         Scanner sc = new Scanner(System.in);
         
@@ -196,6 +203,7 @@ public class Menu {
         }
     }
     
+    /* manageStaff() - Displays operations on 'staff' table and calls the selected query */
     void manageStaff(Statement stmt) throws Exception {
         Scanner sc = new Scanner(System.in);
         
@@ -226,6 +234,7 @@ public class Menu {
         }
     }
     
+    /* manageCustomers() - Displays operations on 'customers' table and calls the selected query */
     void manageCustomers(Statement stmt) throws Exception {
         Scanner sc = new Scanner(System.in);
         
@@ -256,6 +265,7 @@ public class Menu {
         }
     }
     
+    /* manageServices() - Displays operations on 'services' table and calls the selected query */
     void manageServices(Statement stmt, Connection conn) throws Exception {
         Scanner sc = new Scanner(System.in);
         
@@ -282,6 +292,7 @@ public class Menu {
         }
     }
     
+    /* viewReports() - Displays various report types and calls the selected query */
     void viewReports(Statement stmt) throws Exception {
         Scanner sc = new Scanner(System.in);
         
